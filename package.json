@@ -2,8 +2,9 @@
   "name": "snapshotimporter",
   "version": "1.0.0",
   "description": "A utility to import a CSV snapshot into MongoDB",
-  "main": "index.js",
+  "main": "import.js",
   "scripts": {
+    "import": "node import.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

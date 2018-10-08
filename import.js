@@ -20,7 +20,7 @@ const snapshotSchema = new mongoose.Schema({
 
   csv.fromPath("snapshot-final.csv")
   .on("data", (data) => {
-    
+    console.log(new Date().getTime());
     const account_name = data[1];
     const owner_key = data[2];
     const active_key = data[3];
@@ -28,15 +28,10 @@ const snapshotSchema = new mongoose.Schema({
     const staked = parseFloat(data[5]) || 0;
     const delegated = parseFloat(data[6]) || 0;
     const total = parseFloat(data[7]) || 0;
-
-    const recordToInsert = new Account({account_name, owner_key, active_key, total_nostake, staked, delegated, total });
-
+    const recordToInsert = new Account({account_name, owner_key, active_key, total_nostake, staked, delegated, total});
     recordToInsert.save((err) => {
         if (err) console.log(err);
     });
-
-    console.log(new Date().getTime());
-
   })
   .on("end", () => console.log(`Done`));
 
