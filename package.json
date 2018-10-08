@@ -4,6 +4,7 @@
   "description": "A utility to import a CSV snapshot into MongoDB",
   "main": "import.js",
   "scripts": {
+    "start": "node worbli-api.js",
     "import": "node import-snapshot.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
