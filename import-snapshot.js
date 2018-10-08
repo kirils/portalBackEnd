@@ -1,8 +1,10 @@
 'use strict';
+require('dotenv').config()
+
 const csv = require('fast-csv');
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/worbli', { useNewUrlParser: true });
+mongoose.connect(`mongodb://${process.env.DB_HOST}/${process.env.DB_NAME}`, { useNewUrlParser: true });
 
 const snapshotSchema = new mongoose.Schema({
     account_name:   { type: String, required: true, unique: true},
@@ -18,7 +20,7 @@ const snapshotSchema = new mongoose.Schema({
 
   const Account = mongoose.model('Snapshot', snapshotSchema);
 
-  csv.fromPath("snapshot-final.csv")
+  csv.fromPath(`${process.env.CSV_NAME}`)
   .on("data", (data) => {
     console.log(new Date().getTime());
     const account_name = data[1];

@@ -13,6 +13,10 @@ sudo systemctl start mongod
 
     Install [node.js](https://nodejs.org)).
 
+##### Install Dependancies
+
+    npm install
+
 ##### Start Import
 
     npm run import
