@@ -1,0 +1,23 @@
+{
+  "name": "snapshotimporter",
+  "version": "1.0.0",
+  "description": "A utility to import a CSV snapshot into MongoDB",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/worbli/SnapshotImporter.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/worbli/SnapshotImporter/issues"
+  },
+  "homepage": "https://github.com/worbli/SnapshotImporter#readme",
+  "dependencies": {
+    "fast-csv": "^2.4.1",
+    "mongoose": "^5.3.2"
+  }
+}
