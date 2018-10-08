@@ -2,7 +2,7 @@
 const csv = require('fast-csv');
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/snapshot', { useNewUrlParser: true });
+mongoose.connect('mongodb://localhost/worbli', { useNewUrlParser: true });
 
 const snapshotSchema = new mongoose.Schema({
     account_name:   { type: String, required: true, unique: true},
@@ -16,7 +16,7 @@ const snapshotSchema = new mongoose.Schema({
     updated_at:     Date
   });
 
-  const Account = mongoose.model('Account', snapshotSchema);
+  const Account = mongoose.model('Snapshot', snapshotSchema);
 
   csv.fromPath("snapshot-final.csv")
   .on("data", (data) => {
