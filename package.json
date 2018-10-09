@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/worbli/SnapshotImporter#readme",
   "dependencies": {
-    "biguint-format": "^1.0.0",
+    "big-integer": "^1.6.36",
     "body-parser": "^1.18.3",
     "compression": "^1.7.3",
     "cors": "^2.8.4",

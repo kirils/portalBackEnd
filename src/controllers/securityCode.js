@@ -1,12 +1,12 @@
-const crypto = require('crypto')
-const biguint = require('biguint-format')
+var bigInt = require("big-integer");
+var crypto = require('crypto');
 const securityCodeModel = require('../models/securityCode.js')
 /**
  * Create Security Code
  * @returns {SecurityCode}
  */
 function create(req, res) {
-  const security_code = biguint(crypto.randomBytes(64), 'hex', { prefix: '0x' }); // TODO: Check with contract dev that this is right the value is `0x748eba3cfdc84c0d9ecd86a4878c7291649abee4c93417226af3ed2f31ec6e81c4ebafc770f77eb9aefec1662fc7fbb70e4b855589ef976d1ff88b88652a2262`
+  const security_code = bigInt(Buffer.from(crypto.randomBytes(8)).toString('hex'), 16);
   securityCodeModel({security_code}).save((err) => {
     if (err) {
         res.json({err})
