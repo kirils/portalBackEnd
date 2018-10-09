@@ -12,8 +12,10 @@ function create(req, res) {
     const password = req.password;
     const mainnet_account_name = req.mainnet_account_name;
     const worbli_account_name = req.worbli_account_name;
+    const worbli_account_created = req.worbli_account_created;
+    const authenteq_id = req.authenteq_id;
     const security_code = req.security_code;
-    registerUserModel({first_name, last_name, country_residence, password, mainnet_account_name, worbli_account_name, security_code}).save((err) => {
+    registerUserModel({first_name, last_name, country_residence, password, mainnet_account_name, worbli_account_name, worbli_account_created, authenteq_id, security_code}).save((err) => {
     if (err) {
         res.json({err})
     } else {
