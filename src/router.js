@@ -1,5 +1,5 @@
 const express = require('express');
-const registerRoutes = require('./routes/register.js');
+const registerUserRoutes = require('./routes/registerUser.js');
 const securityCodeRoutes = require('./routes/securityCode.js');
 const router = express.Router();
 
@@ -16,7 +16,7 @@ router.get('/', (req, res) =>
   })
 );
 
-router.use('/register', registerRoutes);
+router.use('/register-user', registerUserRoutes);
 router.use('/security-code', securityCodeRoutes);
 
 module.exports = router;
