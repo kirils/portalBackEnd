@@ -1,7 +1,7 @@
 'use strict';
 require('dotenv').config()
 const mongoose = require('mongoose');
-const app = require('./express.js');
+const app = require('./src/express.js');
 
 mongoose.connect(`mongodb://${process.env.DB_HOST}/${process.env.DB_NAME}`, { useNewUrlParser: true });
 mongoose.connection.on('error', () => {
