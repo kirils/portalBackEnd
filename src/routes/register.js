@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router(); 
 
-router.get('/security-code', (req, res) =>
-  res.send('OK')
+router.get('/', (req, res) =>
+  res.send('OK2')
 );
 
 module.exports = router;
