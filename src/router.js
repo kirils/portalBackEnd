@@ -11,12 +11,14 @@ router.get('/', (req, res) =>
     endpoints: {
       '/register' : 'register a new worbli account',
       '/security-code/' : 'Create a new security code',
-      '/security-code/8945830948594850450123' : 'Lookup a security code'
+      '/security-code/8945830948594850450123' : 'Lookup a security code',
+      '/snap-shot/username' : 'Lookup an account by main net username'
     }
   })
 );
 
 router.use('/register-user', registerUserRoutes);
 router.use('/security-code', securityCodeRoutes);
+router.use('/snap-shot', securityCodeRoutes);
 
 module.exports = router;
