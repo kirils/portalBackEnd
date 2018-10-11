@@ -29,8 +29,8 @@ function create(req, res) {
         tr.delegatebw({
           from: 'eosio',
           receiver: worbli_account_name,
-          stake_net_quantity: '10.0000 EOS',
-          stake_cpu_quantity: '10.0000 EOS',
+          stake_net_quantity: '10.0000 WBI',
+          stake_cpu_quantity: '10.0000 WBI',
           transfer: 0
         })
       })
