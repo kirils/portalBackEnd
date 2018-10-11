@@ -1,5 +1,3 @@
-const crypto = require('crypto')
-const biguint = require('biguint-format')
 const registerUserModel = require('../models/registerUser.js')
 /**
  * Create Security Code
