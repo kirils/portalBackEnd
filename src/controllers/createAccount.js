@@ -4,11 +4,6 @@ const chainId = process.env.CHAIN_ID
 const keyProvider = process.env.KEY_PROVIDER
 const eos = Eos({httpEndpoint, chainId, keyProvider});
 
-console.log(httpEndpoint);
-console.log(chainId);
-console.log(keyProvider);
-
-
 /**
  * Create a Worbli account
  * @returns {worbliAccountName}
@@ -42,7 +37,6 @@ function create(req, res) {
         })
       })
       .then((response) => {
-        console.log(response);
         res.json({
           "transaction_id": response.transaction_id,
           "worbli_account_name": worbli_account_name,
@@ -51,7 +45,6 @@ function create(req, res) {
         });
       })
       .catch((err) => {
-        console.log(err);
         res.json(err);
       })
 }
