@@ -7,8 +7,7 @@ const snapShotModel = require('../models/snapShot.js')
 function lookup(req, res) {
     const snap_shot = req.params.snapShot;
     snapShotModel.find({account_name: snap_shot}, (err, data) => { 
-        console.log(data);
-        if(data[0] && data[0].snap_shot) {
+        if(data[0] && data[0].account_name) {
             return res.send(true);
         } else  {
             return res.send(false);
