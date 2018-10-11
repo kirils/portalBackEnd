@@ -1,0 +1,31 @@
+{
+	"variables": [],
+	"info": {
+		"name": "worbli-api-collection",
+		"_postman_id": "79492a6c-0038-766c-2434-1f530ec6e3e7",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:9093/api/v1/create-account/",
+			"request": {
+				"url": "http://localhost:9093/api/v1/create-account/",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"worbli_account_name\":\"worblitest\",\n\t\"active_publicKey\":\"EOS7BmSwu97XPmPBuFGeFnpvAijBQYKdEWpsTwogwWNE8iWoChr8S\",\n\t\"owner_publicKey\":\"EOS5kAFDTgnF5BpJd9YCnn4gEJzQNUiKvHKtsMJ3dXh3p3y6DqhUE\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
