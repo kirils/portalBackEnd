@@ -6,7 +6,8 @@ const snapShotModel = require('../models/snapShot.js')
  */
 function lookup(req, res) {
     const snap_shot = req.params.snapShot;
-    snapShotModel.find({snap_shot}, (err, data) => { 
+    snapShotModel.find({account_name: snap_shot}, (err, data) => { 
+        console.log(data);
         if(data[0] && data[0].snap_shot) {
             return res.send(true);
         } else  {
@@ -15,4 +16,4 @@ function lookup(req, res) {
     });   
 }
 
-module.exports = { create, lookup };
+module.exports = { lookup };

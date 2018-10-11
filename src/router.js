@@ -1,6 +1,7 @@
 const express = require('express');
 const registerUserRoutes = require('./routes/registerUser.js');
 const securityCodeRoutes = require('./routes/securityCode.js');
+const snapShotsRoutes = require('./routes/snapShot.js');
 const router = express.Router();
 
 router.get('/', (req, res) =>
@@ -19,6 +20,6 @@ router.get('/', (req, res) =>
 
 router.use('/register-user', registerUserRoutes);
 router.use('/security-code', securityCodeRoutes);
-router.use('/snap-shot', securityCodeRoutes);
+router.use('/snap-shot', snapShotsRoutes);
 
 module.exports = router;

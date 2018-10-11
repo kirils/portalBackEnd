@@ -1,5 +1,5 @@
 const express = require('express');
-const securityCodeController = require('../controllers/snapShot.js');
+const snapShotController = require('../controllers/snapShot.js');
 const router = express.Router();
 
 router.route('/:snapShot')
