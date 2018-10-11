@@ -21,13 +21,11 @@ function create(req, res) {
           owner: owner_publicKey,
           active: active_publicKey
         })
-       
         tr.buyrambytes({
           payer: 'eosio',
           receiver: worbli_account_name,
           bytes: 8192
         })
-       
         tr.delegatebw({
           from: 'eosio',
           receiver: worbli_account_name,

@@ -21,5 +21,9 @@ sudo systemctl start mongod
 
     npm run import
 
+##### Start API
+
+    npm start
+
 
 
