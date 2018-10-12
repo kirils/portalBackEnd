@@ -24,7 +24,7 @@ function create(req, res) {
         tr.buyrambytes({
           payer: 'eosio',
           receiver: worbli_account_name,
-          bytes: 8192
+          bytes: 4096
         })
         tr.delegatebw({
           from: 'eosio',
