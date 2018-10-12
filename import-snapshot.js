@@ -10,9 +10,9 @@ const snapshotSchema = new mongoose.Schema({
     account_name:   { type: String, required: true},
     owner_key:      { type: String, required: true},
     active_key:     { type: String, required: true},
-    total_nostake:  { type: Number, required: true},
-    staked:         { type: Number, required: true},
-    delegated:      { type: Number, required: true},
+    total_nostake:  { type: Number},
+    staked:         { type: Number},
+    delegated:      { type: Number},
     total:          { type: Number, required: true},
     created_at:     Date,
     updated_at:     Date
