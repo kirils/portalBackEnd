@@ -4,6 +4,7 @@ const registerUserRoutes = require('./routes/registerUser.js');
 const securityCodeRoutes = require('./routes/securityCode.js');
 const snapShotsRoutes = require('./routes/snapShot.js');
 const createAccountRoutes = require('./routes/createAccount.js');
+const sendEmailRoutes = require('./routes/sendEmail.js');
 
 const router = express.Router();
 
@@ -25,5 +26,6 @@ router.use('/register-user', registerUserRoutes);
 router.use('/security-code', securityCodeRoutes);
 router.use('/snap-shot', snapShotsRoutes);
 router.use('/create-account', createAccountRoutes);
+router.use('/send-email', sendEmailRoutes);
 
 module.exports = router;
