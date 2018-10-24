@@ -13,4 +13,6 @@ app.use(helmet());
 app.use(cors());
 app.use('/api/v1', routes);
 
+app.get('/', (req, res) => res.send('WORBLI API'))
+
 module.exports = app;
