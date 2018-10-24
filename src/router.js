@@ -8,7 +8,9 @@ const sendEmailRoutes = require('./routes/sendEmail.js');
 
 const router = express.Router();
 
-router.get('/', (req, res) =>
+router.get('/', (req, res) => res.send('WORBLI API'))
+
+router.get('/api/v1', (req, res) =>
   res.json({
     api_version: '1',
     location: '/',
@@ -17,15 +19,17 @@ router.get('/', (req, res) =>
       '/register' : 'register a new worbli account',
       '/security-code/' : 'Create a new security code',
       '/security-code/8945830948594850450123' : 'Lookup a security code',
-      '/snap-shot/username' : 'Lookup an account by main net username'
+      '/snap-shot/username' : 'Lookup an account by main net username',
+      '/send-email/verify/email' : 'Send an email verification email',
+      '/send-email/welcome/email' : 'Send an email verification email'
     }
   })
 );
 
-router.use('/register-user', registerUserRoutes);
-router.use('/security-code', securityCodeRoutes);
-router.use('/snap-shot', snapShotsRoutes);
-router.use('/create-account', createAccountRoutes);
-router.use('/send-email', sendEmailRoutes);
+router.use('/api/v1/register-user', registerUserRoutes);
+router.use('/api/v1/security-code', securityCodeRoutes);
+router.use('/api/v1/snap-shot', snapShotsRoutes);
+router.use('/api/v1/create-account', createAccountRoutes);
+router.use('/api/v1/send-email', sendEmailRoutes);
 
 module.exports = router;
