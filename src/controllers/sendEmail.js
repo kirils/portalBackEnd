@@ -57,10 +57,10 @@ function validate(req, res) {
     
     sendPromise
     .then((data) => {
-        console.log(data.MessageId);
+        return res.send(true);
     })
     .catch((err) => {
-        console.error(err, err.stack);
+        return res.send(false);
     });
 }
 
@@ -117,10 +117,10 @@ function welcome(req, res) {
     
     sendPromise
     .then((data) => {
-        console.log(data.MessageId);
+        return res.send(true);
     })
     .catch((err) => {
-        console.error(err, err.stack);
+        return res.send(false);
     });
 }
 module.exports = { validate, welcome };
