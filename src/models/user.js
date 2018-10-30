@@ -11,4 +11,4 @@ const userSchema = new mongoose.Schema({
     updated_at:             Date
 });
 
-module.exports = mongoose.model('login', loginSchema);
+module.exports = mongoose.model('login', userSchema);
