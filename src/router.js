@@ -22,7 +22,7 @@ router.get('/api/v1', (req, res) =>
       '/security-code/' : 'Create a new security code',
       '/security-code/8945830948594850450123' : 'Lookup a security code',
       '/snap-shot/username' : 'Lookup an account by main net username',
-      '/send-email/verify/email' : 'Send an email verification email',
+      '/send-email/validate/email' : 'Send an email verification email',
       '/send-email/welcome/email' : 'Send an email verification email',
       '/profile' : 'get and post a users profile',
       '/login' : 'log a user in',

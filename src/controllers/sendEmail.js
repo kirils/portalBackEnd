@@ -1,11 +1,16 @@
 var AWS = require('aws-sdk');
-//AWS.config.loadFromPath('./aws-config.json');
 AWS.config.update({ "accessKeyId": process.env.AWS_ACCESS_KEY_ID, "secretAccessKey": process.env.AWS_SECRET_ACCESS_KEY, "region": "us-east-1" });
 /**
  * Send an email verification email 
  * @returns {email recipt}
  */
 function validate(req, res) {
+  const data = req.params.email.split("~");
+    // TODO: the tillde isnt right we should pass params
+  const email = data[0];
+  const securityCode = data[1];
+  // TODO: Save security code and email to database
+
     var htmlEmail = `
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml">
@@ -28,9 +33,9 @@ function validate(req, res) {
             </br></br></br>
               <p>Welcome to WORBLI!</p>
               <p>Click the button below to confirm your email.</p>
-              <a href="https://portal-test.worbli.io/dashboard/profile/8983473475398745987/"><button type="button" style="cursor: pointer; outline: none; font-weight: 600; border-radius:3px; background-color: #37527A; border: none; color: white; padding: 15px 32px; text-align: center; text-decoration: none; display: inline-block; font-size: 15px; width:250px">Verify Email</button></a></br></br>
+              <a href="https://portal-test.worbli.io/dashboard/profile/${securityCode}/"><button type="button" style="cursor: pointer; outline: none; font-weight: 600; border-radius:3px; background-color: #37527A; border: none; color: white; padding: 15px 32px; text-align: center; text-decoration: none; display: inline-block; font-size: 15px; width:250px">Verify Email</button></a></br></br>
               <p>If you can't confirm by clicking the button above, please copy the address below to the browser address bar to confirm.</p>
-              <a href="https://portal-test.worbli.io/dashboard/profile/8983473475398745987/">https://portal-test.worbli.io/dashboard/profile/8983473475398745987/</a></br></br></br>
+              <a href="https://portal-test.worbli.io/dashboard/profile/${securityCode}/">https://portal-test.worbli.io/dashboard/profile/${securityCode}/</a></br></br></br>
               <p>If this activity is not your own operation, please contact us immediatly via support@worbli.io</p>
             </td>
             </tr>
@@ -42,7 +47,7 @@ function validate(req, res) {
     </html>
     `
     var params = {
-        Destination: {ToAddresses: [req.params.email]},
+        Destination: {ToAddresses: [email]},
         Message: {
             Body: { 
                 Html: {Charset: "UTF-8", Data: htmlEmail}
