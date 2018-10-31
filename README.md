@@ -1,4 +1,4 @@
-# Snapshot Importer
+# Portal Backend
 
 ### Node Installation Guide
 
@@ -13,17 +13,19 @@ sudo systemctl start mongod
 
     Install [node.js](https://nodejs.org)).
 
+    npm install pm2
+
 ##### Install Dependancies
 
     npm install
 
-##### Start Import
+##### Start Import of snapshot
 
     npm run import
 
 ##### Start API
 
-    npm start
+    pm2 start worbli-api --watch
 
 
 
