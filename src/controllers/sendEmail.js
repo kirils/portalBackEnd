@@ -12,14 +12,14 @@ function validate(req, res) {
   if (email && security_code){
     regusterUserModel({email, security_code}).save((err) => {
       if (err) {
-          res.json({data:'resent'});
           regusterUserModel.find({email}, (err, data) => {
             if(!err){
+              res.json(true);
               let email = data[0].email;
               let security_code = data[0].security_code;
               _sendEmail(email, security_code);
             } else {
-              res.json({data:'fail'})
+              res.json(false)
             }
           });  
       } else {
@@ -28,7 +28,7 @@ function validate(req, res) {
       };
     });
   } else {
-    res.json({data:'fail'})
+    res.json(false)
   }
 }
 
