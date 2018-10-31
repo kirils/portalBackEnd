@@ -6,11 +6,33 @@ const regusterUserModel = require('../models/registerUser.js')
  * @returns {email recipt}
  */
 function validate(req, res) {
-  
   const data = req.params.email.split("~");
   const email = data[0];
   const security_code = data[1];
+  if (email && security_code){
+    regusterUserModel({email, security_code}).save((err) => {
+      if (err) {
+          res.json({data:'resent'});
+          regusterUserModel.find({email}, (err, data) => {
+            if(!err){
+              let email = data[0].email;
+              let security_code = data[0].security_code;
+              _sendEmail(email, security_code);
+            } else {
+              res.json({data:'fail'})
+            }
+          });  
+      } else {
+        res.json({data:'success'})
+        _sendEmail(email, security_code);
+      };
+    });
+  } else {
+    res.json({data:'fail'})
+  }
+}
 
+function _sendEmail(email, security_code){
   var htmlEmail = `
   <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
   <html xmlns="http://www.w3.org/1999/xhtml">
@@ -46,30 +68,21 @@ function validate(req, res) {
     </body>
   </html>
   `
-
-
-  regusterUserModel({email, security_code}).save((err) => {
-    if (err) {
-        res.json({err})
-    } else {
-      var params = {
-        Destination: {ToAddresses: [email]},
-        Message: {
-          Body: { 
-            Html: {Charset: "UTF-8", Data: htmlEmail}
-          },
-          Subject: {Charset: 'UTF-8', Data: '[WORBLI] Email Validation'}
-        },
-      Source: 'do-not-reply@worbli.io', 
-      ReplyToAddresses: ['do-not-reply@worbli.io'],
-    };       
-      
-    var sendPromise = new AWS.SES({apiVersion: '2010-12-01'}).sendEmail(params).promise();  
-    sendPromise
-    .then((data) => {return res.send(true)})
-    .catch((err) => {return res.send(false);});
-    };
-  });
+  var params = {
+    Destination: {ToAddresses: [email]},
+    Message: {
+      Body: { 
+        Html: {Charset: "UTF-8", Data: htmlEmail}
+      },
+      Subject: {Charset: 'UTF-8', Data: '[WORBLI] Email Validation'}
+    },
+    Source: 'do-not-reply@worbli.io', 
+    ReplyToAddresses: ['do-not-reply@worbli.io'],
+  };       
+  var sendPromise = new AWS.SES({apiVersion: '2010-12-01'}).sendEmail(params).promise();  
+  sendPromise
+  .then((data) => {return true})
+  .catch((err) => {return false});
 }
 
 /**
@@ -125,10 +138,11 @@ function welcome(req, res) {
     
     sendPromise
     .then((data) => {
-        return res.send(true);
+        return res.json(true);
     })
     .catch((err) => {
-        return res.send(false);
+        return res.json(false);
     });
 }
 module.exports = { validate, welcome };
+
