@@ -11,8 +11,8 @@ function create(req, res) {
     if (err) {
         res.json({err})
     } else {
-        res.json({security_code}
-    )};
+        res.json({security_code})
+    };
   });
 }
 

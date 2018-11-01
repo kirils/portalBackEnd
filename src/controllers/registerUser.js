@@ -1,25 +1,36 @@
 const registerUserModel = require('../models/registerUser.js')
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 /**
  * Create Security Code
  * @returns {SecurityCode}
  */
 function create(req, res) {
-    const first_name = req.first_name;
-    const last_name = req.last_name;
-    const country_residence = req.country_residence;
-    const password = req.password;
-    const mainnet_account_name = req.mainnet_account_name;
-    const worbli_account_name = req.worbli_account_name;
-    const worbli_account_created = req.worbli_account_created;
-    const authenteq_id = req.authenteq_id;
-    const security_code = req.security_code;
-    registerUserModel({first_name, last_name, country_residence, password, mainnet_account_name, worbli_account_name, worbli_account_created, authenteq_id, security_code}).save((err) => {
-    if (err) {
-        res.json({err})
-    } else {
-        res.json({security_code}
-    )};
-  });
+    
+    const security_code = req.body.security_code;
+    const first_name = req.body.first_name;
+    const last_name = req.body.family_name;
+    const country_residence = req.body.country_residence;
+    const plaintextPassword = req.body.password;
+    const updated_at = Date.now()
+
+    bcrypt.hash(plaintextPassword, saltRounds, (err, hash) => {
+      if (!err){
+        const password = hash;
+        const newData = {first_name, last_name, country_residence, password, updated_at}
+        const query = {security_code};
+    
+        registerUserModel.findOneAndUpdate(query, newData, {upsert:true}, (err, doc) => {
+            if (!err){
+                res.json(true)
+            } else {
+                res.json(false)
+            }
+        });
+      } else {
+        res.json(false)
+      }
+    });
 }
 
 module.exports = { create };

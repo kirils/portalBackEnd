@@ -23,7 +23,7 @@ sudo systemctl start mongod
 
     npm run import
 
-##### Start API and this sdfsdf sd fsd fsd fsdf sd fsd f
+##### Start API
 
     pm2 start worbli-api --watch
 

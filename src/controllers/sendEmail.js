@@ -9,11 +9,13 @@ function validate(req, res) {
   const data = req.params.email.split("~");
   const email = data[0];
   const security_code = data[1];
+  const created_at = Date.now();
+  const updated_at = Date.now()
   if (email && security_code){
-    regusterUserModel({email, security_code}).save((err) => {
+    regusterUserModel({email, security_code, created_at, updated_at}).save((err) => {
       if (err) {
           regusterUserModel.find({email}, (err, data) => {
-            if(!err){
+            if (!err){
               res.json(true);
               let email = data[0].email;
               let security_code = data[0].security_code;
