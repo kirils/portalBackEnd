@@ -4,6 +4,6 @@ const router = express.Router();
 
 router.route('/')
     /** GET /api/v1/login - log a user in */
-    .get(loginController.check);
+    .post(loginController.check);
 
 module.exports = router;
