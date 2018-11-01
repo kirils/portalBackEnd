@@ -17,13 +17,13 @@ sudo systemctl start mongod
 
 ##### Install Dependancies
 
-    npm install
+    npm install.
 
 ##### Start Import of snapshot
 
     npm run import
 
-##### Start API
+##### Start API and this sdfsdf sd fsd fsd fsdf sd fsd f
 
     pm2 start worbli-api --watch
 
