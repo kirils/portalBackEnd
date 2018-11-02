@@ -48,7 +48,7 @@ function _sendEmail(email, security_code){
     <table style="margin: 0; padding: 60px; background-color: #F7F7F7;" cellpadding="0" cellspacing="0" width="100%">
       <tr>
       <td style="text-align:center">
-        <img src="https://www.dac.city/esm-bundled/images/email-logo.png" width="200px" style="margin-bottom: 20px;">
+        <img src="https://portal-b.worbli.io/esm-bundled/images/email-logo.png" width="200px" style="margin-bottom: 20px;">
         <table style="margin: 0; padding: 60px; background-color: #FFFFFF; text-align:left; border-radius: 0.4em;" cellpadding="0" cellspacing="0" width="100%">
         <tr>
           <td><b>Confirm Your Registration</b></td>
@@ -60,7 +60,7 @@ function _sendEmail(email, security_code){
             <p>Click the button below to confirm your email.</p>
             <a href="https://portal-b.worbli.io/dashboard/profile/${security_code}/"><button type="button" style="cursor: pointer; outline: none; font-weight: 600; border-radius:3px; background-color: #37527A; border: none; color: white; padding: 15px 32px; text-align: center; text-decoration: none; display: inline-block; font-size: 15px; width:250px">Verify Email</button></a></br></br>
             <p>If you can't confirm by clicking the button above, please copy the address below to the browser address bar to confirm.</p>
-            <a href="https://portal-b.worbli.io/dashboard/profile/${security_code}/">https://www.dac.city/dashboard/profile/${security_code}/</a></br></br></br>
+            <a href="https://portal-b.worbli.io/dashboard/profile/${security_code}/">https://portal-b.worbli.io/dashboard/profile/${security_code}/</a></br></br></br>
             <p>If this activity is not your own operation, please contact us immediatly via support@worbli.io</p>
           </td>
           </tr>
