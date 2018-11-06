@@ -28,5 +28,9 @@ function get_account(req, res) {
     console.log(req.body)
     res.json(true)
 }
+function post_snapshot(req, res) {
+    console.log(req.body)
+    res.json(true)
+}
 
-module.exports = { post_login, post_auth, post_profile, get_profile, put_profile, post_account, get_account};
+module.exports = { post_login, post_auth, post_profile, get_profile, put_profile, post_account, get_account, post_snapshot};
