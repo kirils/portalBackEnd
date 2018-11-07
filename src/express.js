@@ -24,7 +24,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(compress());
 app.use(helmet());
-app.use(cors(corsOptions));
+app.use(cors()); // corsOptions
 app.use('/', routes);
 
 module.exports = app;
