@@ -5,7 +5,7 @@ function post_authorize(req, res) {
     console.log(req.body.email)
     console.log(req.body.agreed_terms) // true
     console.log(req.body.agreed_marketing) // true
-    res.json({data: "pass"})
+    res.status(200).json({data: "pass"})
 }
 function post_welcome(req, res) {
     console.log(req.body)
