@@ -1,8 +1,9 @@
 //const registerUserModel = require('../models/registerUser.js')
 
 function post_login(req, res) {
-    console.log(req.body)
-    res.json(true)
+    console.log(req.body.email);
+    console.log(req.body.password);
+    res.json({data: 'pass'})
 }
 function post_auth(req, res) {
     console.log(req.body)

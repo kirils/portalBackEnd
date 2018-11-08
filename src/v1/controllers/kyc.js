@@ -1,7 +1,7 @@
 const fetch = require('../components/fetch.js')
 
 function post_applicant(req, res) {
-    // TODO: Get JWT from header and decode it to find out who the user is, then if they have already completed KYC (not failed) dont allow then to di it again?
+    // TODO: Get JWT from header and decode it to find out who the user is, then if they have already completed KYC (not failed) dont allow then to do it again?
     const first_name = req.body.first_name;
     const last_name = req.body.last_name;
     const applicant = {

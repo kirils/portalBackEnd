@@ -9,6 +9,6 @@ router.route('/profile/').get(userController.get_profile);
 router.route('/profile/').put(userController.put_profile);
 router.route('/account/').post(userController.post_account);
 router.route('/account/').get(userController.get_account);
-router.route('/snapshot/').post(userController.post_snapshot);
+router.route('/snapshot/').get(userController.post_snapshot);
 
 module.exports = router;
