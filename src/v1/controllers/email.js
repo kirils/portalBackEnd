@@ -1,10 +1,29 @@
-//const registerUserModel = require('../models/registerUser.js')
+const userModel = require('../models/user.js')
 const jwt = require('../components/jwt.js');
 
 function post_authorize(req, res) {
-    console.log(req.body.email)
-    console.log(req.body.agreed_terms) // true
-    console.log(req.body.agreed_marketing) // true
+    const email = req.body.email;
+    const agreed_terms = req.body.agreed_terms;
+    const agreed_marketing = req.body.agreed_marketing;
+    userModel({email, agreed_terms, agreed_marketing}).save((err) => {
+        if (!err) {
+            console.log('saved');
+            const jwt = jwt.jwt_sign({email});
+            console.log(jwt)
+                //TODO: Make JWT
+                //TODO: Send Email with jwt in the right remplate
+        } else {
+            console.log('not saved');
+            // TODO find the email in the database
+            // make jwt
+            // send email with jwt in the right remplate
+        };
+  });
+
+
+
+
+
     res.status(200).json({data: "pass"})
 }
 function post_welcome(req, res) {
