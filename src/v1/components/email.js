@@ -27,7 +27,7 @@ function send_email(email, newjwt, template) {
         .catch((err) => {
             reject(err);
         });
-    })
+    });
 }
 
 
