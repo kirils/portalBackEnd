@@ -7,6 +7,7 @@ function post_login(req, res) {
     res.json({data: 'pass'})
 }
 function post_auth(req, res) {
+    console.log(req.headers.authorization)
     const bearer = req.headers.authorization.split(" ")
     const token = bearer[1];
     jwt.jwt_decode(token)
