@@ -1,4 +1,5 @@
 //const registerUserModel = require('../models/registerUser.js')
+const jwt = require('../components/jwt.js');
 
 function post_login(req, res) {
     console.log(req.body.email);
@@ -6,9 +7,17 @@ function post_login(req, res) {
     res.json({data: 'pass'})
 }
 function post_auth(req, res) {
-    console.log(req.body)
-    res.json(true)
+    const bearer = req.headers.authorization.split(" ")
+    const token = bearer[1];
+    jwt.jwt_decode(token)
+    .then((data) => {
+        res.status(200).json({data: true})
+    })
+    .catch((err) => {
+        res.status(400).json({data: false})
+    })
 }
+
 function post_profile(req, res) {
     console.log(req.body)
     res.json(true)
