@@ -90,7 +90,7 @@ function send_email(email, newjwt, template) {
             Body: { 
             Html: {Charset: "UTF-8", Data: htmlEmail}
             },
-            Subject: {Charset: 'UTF-8', Data: '[WORBLI] Email Validation'}
+            Subject: {Charset: 'UTF-8', Data: '[WORBLI] Password Reset'}
         },
         Source: 'do-not-reply@worbli.io', 
         ReplyToAddresses: ['do-not-reply@worbli.io'],
