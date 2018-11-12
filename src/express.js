@@ -12,7 +12,7 @@ const limiter = rateLimit({
 });
 
 const corsOptions = {
-    origin: 'https://dac.city',
+    origin: 'https://www.dac.city',
     allowedHeaders: ['Content-Type', 'Authorization', 'Content-Length', 'X-Requested-With', 'Accept'],
     methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
     optionsSuccessStatus: 200
