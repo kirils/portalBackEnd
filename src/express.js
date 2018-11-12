@@ -12,7 +12,7 @@ const limiter = rateLimit({
 });
 
 const corsOptions = {
-    origin: 'http://localhost:9000',
+    origin: 'https://dac.city',
     allowedHeaders: ['Content-Type', 'Authorization', 'Content-Length', 'X-Requested-With', 'Accept'],
     methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
     optionsSuccessStatus: 200
@@ -24,7 +24,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(compress());
 app.use(helmet());
-app.use(cors()); // corsOptions
+app.use(cors(corsOptions)); 
 app.use('/', routes);
 
 module.exports = app;
