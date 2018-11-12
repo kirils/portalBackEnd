@@ -34,10 +34,23 @@ function post_welcome(req, res) {
     console.log(req.body)
     res.json(true)
 }
+
 function post_reset(req, res) {
-    console.log(req.body)
-    res.json(true)
+    const email = req.body.email;
+    userModel.find({email},(err, data) => {
+        if (!err && data && data[0] && data[0]._id) {
+            const mongo_id = data[0]._id;
+            const email = data[0].email;
+            const newjwt = jwt.jwt_expires({email, mongo_id}, '72h');
+            emailSender.send_email(email, newjwt, 'authorize')
+            .then(() => res.status(200).json({data: true}))
+            .catch(() => res.status(400).json({data: false}))
+        } else {
+            res.status(200).json({data: true});
+        }
+    });
 }
+
 function post_add(req, res) {
     console.log(req.body.email);
     //TODO: Save email to database

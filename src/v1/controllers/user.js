@@ -88,4 +88,5 @@ function post_snapshot(req, res) {
     res.json(true)
 }
 
+
 module.exports = { post_login, post_auth, post_profile, get_profile, put_profile, post_account, get_account, post_snapshot, post_password};
