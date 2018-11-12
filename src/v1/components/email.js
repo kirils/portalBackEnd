@@ -27,9 +27,9 @@ function send_email(email, newjwt, template) {
                     </br></br></br>
                       <p>Welcome to WORBLI!</p>
                       <p>Click the button below to confirm your email.</p>
-                      <a href="${url}/dashboard/profile?token=${newjwt}/"><button type="button" style="cursor: pointer; outline: none; font-weight: 600; border-radius:3px; background-color: #37527A; border: none; color: white; padding: 15px 32px; text-align: center; text-decoration: none; display: inline-block; font-size: 15px; width:250px">Verify Email</button></a></br></br>
+                      <a href="${url}/dashboard/password?token=${newjwt}"><button type="button" style="cursor: pointer; outline: none; font-weight: 600; border-radius:3px; background-color: #37527A; border: none; color: white; padding: 15px 32px; text-align: center; text-decoration: none; display: inline-block; font-size: 15px; width:250px">Verify Email</button></a></br></br>
                       <p>If you can't confirm by clicking the button above, please copy the address below to the browser address bar to confirm.</p>
-                      <a href="${url}/dashboard/profile?token=${newjwt}/">${url}/dashboard/profile?token=${newjwt}/</a></br></br></br>
+                      <a href="${url}/dashboard/password?token=${newjwt}">${url}/dashboard/password?token=${newjwt}</a></br></br></br>
                       <p>If this activity is not your own operation, please contact us immediatly via support@worbli.io</p>
                     </td>
                     </tr>

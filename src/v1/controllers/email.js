@@ -10,7 +10,7 @@ function post_authorize(req, res) {
         if (!err && data) {
             const mongo_id = data[0]._id;
             const email = data[0].email;
-            const newjwt = jwt.jwt_sign({email, mongo_id});
+            const newjwt = jwt.jwt_expires({email, mongo_id}, '72h');
             emailSender.send_email(email, newjwt, 'authorize')
             .then(() => res.status(200).json({data: true}))
             .catch(() => res.status(400).json({data: false}))

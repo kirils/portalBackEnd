@@ -11,6 +11,9 @@ const put_profile = require('./validators/put_profile.js');
 const post_account = require('./validators/post_account.js');
 const get_account = require('./validators/get_account.js');
 const post_snapshot = require('./validators/post_snapshot.js');
+const post_password = require('./validators/post_password.js');
+
+router.route('/password/').post(validate(post_password.validate), userController.post_password);
 
 router.route('/login/').post(validate(post_login.validate), userController.post_login);
 router.route('/auth/').post(validate(post_auth.validate), userController.post_auth);
