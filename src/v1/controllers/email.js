@@ -42,7 +42,7 @@ function post_reset(req, res) {
             const mongo_id = data[0]._id;
             const email = data[0].email;
             const newjwt = jwt.jwt_expires({email, mongo_id}, '72h');
-            emailSender.send_email(email, newjwt, 'authorize')
+            emailSender.send_email(email, newjwt, 'reset')
             .then(() => res.status(200).json({data: true}))
             .catch(() => res.status(400).json({data: false}))
         } else {
