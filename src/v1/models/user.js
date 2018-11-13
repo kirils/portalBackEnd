@@ -5,6 +5,7 @@ const userSchema = new mongoose.Schema({
     agreed_terms:           { type: Boolean },
     agreed_marketing:       { type: Boolean },
     password:               { type: String },
+    worbli_account_name:    { type: String, index: true },
     first_name:             { type: String },
     family_name:            { type: String },
     country_residence:      { type: Number },

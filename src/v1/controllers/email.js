@@ -8,6 +8,7 @@ function post_authorize(req, res) {
     const agreed_marketing = req.body.agreed_marketing;
     userModel.find({email},(err, data) => {
         if (!err && data && data[0] && data[0]._id) {
+            console.log(data)
             const mongo_id = data[0]._id;
             const email = data[0].email;
             const newjwt = jwt.jwt_expires({email, mongo_id}, '72h');
