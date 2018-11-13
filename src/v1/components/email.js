@@ -4,7 +4,8 @@ AWS.config.update({ "accessKeyId": process.env.AWS_ACCESS_KEY_ID, "secretAccessK
 function send_email(email, newjwt, template) {
     return new Promise(function(resolve, reject) {
         if(template === 'authorize'){
-            var url = process.env.FRONT_END_URL
+          var title = '[WORBLI] Verify Email';  
+          var url = process.env.FRONT_END_URL;
             var htmlEmail = `
             <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
             <html xmlns="http://www.w3.org/1999/xhtml">
@@ -43,6 +44,7 @@ function send_email(email, newjwt, template) {
         
           } 
           if(template === 'reset'){
+            var title = '[WORBLI] Password Reset';
             var url = process.env.FRONT_END_URL
             var htmlEmail = `
             <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -90,7 +92,7 @@ function send_email(email, newjwt, template) {
             Body: { 
             Html: {Charset: "UTF-8", Data: htmlEmail}
             },
-            Subject: {Charset: 'UTF-8', Data: '[WORBLI] Password Reset'}
+            Subject: {Charset: 'UTF-8', Data: title}
         },
         Source: 'do-not-reply@worbli.io', 
         ReplyToAddresses: ['do-not-reply@worbli.io'],
