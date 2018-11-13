@@ -1,9 +1,10 @@
 const { Api, JsonRpc, RpcError, JsSignatureProvider } = require('eosjs');
 const fetch = require('node-fetch'); 
 const rpc = new JsonRpc('https://endpoint-1.worbli.io', { fetch });
-const AWS = require('aws-sdk');
-AWS.config.update({ "accessKeyId": process.env.AWS_ACCESS_KEY_ID_SQS, "secretAccessKey": process.env.AWS_SECRET_ACCESS_KEY_SQS, "region": "us-east-2" });
-const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
+
+// const AWS = require('aws-sdk');
+// AWS.config.update({ "accessKeyId": process.env.AWS_ACCESS_KEY_ID_SQS, "secretAccessKey": process.env.AWS_SECRET_ACCESS_KEY_SQS, "region": "us-east-2" });
+// const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
 
 function create_account(data) {
     return new Promise(function(resolve, reject) {

@@ -17,6 +17,8 @@ function post_login(req, res) {
                     res.status(400).json({data: false})
                 }
             });
+        } else {
+            res.status(400).json({data: false})
         }
     })
 }
@@ -65,17 +67,66 @@ function post_password(req, res) {
 }
 
 function post_profile(req, res) {
-
+    const bearer = req.headers.authorization.split(" ")
+    const token = bearer[1];
+    jwt.jwt_decode(token)
+    .then((jwtdata) => {
+        const email = jwtdata.email;
+        const name_first = req.body.name_first;
+        const name_middle = req.body.name_middle;
+        const name_last = req.body.name_last;
+        const address_one = req.body.address_one;
+        const address_two = req.body.address_two;
+        const address_city = req.body.address_city;
+        const address_region = req.body.address_region;
+        const address_zip = req.body.address_zip;
+        const address_country = req.body.address_country;
+        const phone_code = req.body.phone_code;
+        const phone_mobile = req.body.phone_mobile;
+        const date_birth = req.body.date_birth;
+        const gender = req.body.gender;
+        console.log(gender)
+        const query = {email}
+        const newData = {name_first, name_middle, name_last, address_one, address_two, address_city, address_region, address_zip, address_country, phone_code, phone_mobile, date_birth, gender};
+        userModel.findOneAndUpdate(query, newData, {upsert:true}, (err, doc) => {
+            if (!err){
+                console.log(doc)
+                res.status(200).json({data: true})
+            } else {
+                console.log(err)
+                res.status(400).json({data: false})
+            }
+        });
+    })
+    .catch((jwtdata) => {
+        res.status(400).json({data: false})
+    })
 }
 
 function get_profile(req, res) {
-    console.log(req.body)
-    res.json(true)
+    const bearer = req.headers.authorization.split(" ")
+    const token = bearer[1];
+    jwt.jwt_decode(token)
+    .then((jwtdata) => {
+        const email = jwtdata.email;
+        userModel.find({email},(err, data) => {
+            if (!err && data) {
+                let profile = data[0];
+                profile.password = "*********";
+                res.status(200).json({data: true, profile: profile})
+            } else {
+                res.status(400).json({data: false})
+            }
+        })
+    })
 }
 function put_profile(req, res) {
     console.log(req.body)
     res.json(true)
 }
+
+
+
 function post_account(req, res) {
     // TODO: chdck onfido reports are all good
     const worbli_account_name = req.body.worbli_account_name;
