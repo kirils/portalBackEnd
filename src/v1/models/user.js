@@ -22,6 +22,8 @@ const userSchema = new mongoose.Schema({
     security_code:          { type: Number },
     created_at:             { type: Date },
     updated_at:             { type: Date },
+    onfido_status:          { type: String, required: true },
+    onfido_id:              { type: String },
 });
 
 module.exports = mongoose.model('user', userSchema);

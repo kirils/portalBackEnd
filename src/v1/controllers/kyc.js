@@ -1,5 +1,7 @@
 const jwt = require('../components/jwt.js');
-const fetch = require('../components/fetch.js')
+const fetch = require('../components/fetch.js');
+const onfido = require('../components/onfido.js');
+const userModel = require('../models/user.js');
 
 function post_applicant(req, res) {
     let body = req.body
@@ -86,8 +88,44 @@ function post_applicant(req, res) {
 
 
 function get_applicant(req, res) {
-    console.log(req.body)
-    res.json(true)
+    const bearer = req.headers.authorization.split(" ")
+    const token = bearer[1];
+    let email;
+    jwt.jwt_decode(token)
+    .then((data) => {
+        email = data.email; 
+        return onfido.create_applicant()
+    })
+    .then((data) => {
+        const onfido_id = data;
+        const onfido_status = 'started';
+        const newData = {onfido_status, onfido_id};
+        const query = {email};
+        userModel.findOneAndUpdate(query, newData, {upsert:true}, (err, doc) => {
+            if (!err){
+                const email = doc.email;
+                const mongo_id = doc.mongo_id
+                const onfido_status = doc.onfido_status
+                const newjwt = jwt.jwt_sign({email, mongo_id, onfido_status});
+                res.status(200).json({data: true, token: newjwt})
+            } else {
+                console.log("fail")
+                res.status(400).json({data: false})
+            }
+        });
+    })
+    .catch((err) => {
+        res.status(400).json({data: false})
+    })
+
+
+
+    // update status in database
+
+    // make a new token
+
+    // send token and status back to the front end
+
 }
 
 module.exports = { post_applicant, get_applicant};

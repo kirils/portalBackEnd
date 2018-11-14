@@ -6,20 +6,21 @@ function post_authorize(req, res) {
     const email = req.body.email;
     const agreed_terms = req.body.agreed_terms;
     const agreed_marketing = req.body.agreed_marketing;
+    const onfido_status = 'not started';
     userModel.find({email},(err, data) => {
         if (!err && data && data[0] && data[0]._id) {
             console.log(data)
             const mongo_id = data[0]._id;
             const email = data[0].email;
-            const newjwt = jwt.jwt_expires({email, mongo_id}, '72h');
+            const newjwt = jwt.jwt_expires({email, mongo_id, onfido_status}, '72h');
             emailSender.send_email(email, newjwt, 'authorize')
             .then(() => res.status(200).json({data: true}))
             .catch(() => res.status(400).json({data: false}))
         } else {
-            userModel({email, agreed_terms, agreed_marketing}).save((err, data) => {
+            userModel({email, agreed_terms, agreed_marketing, onfido_status}).save((err, data) => {
                 if (!err && data) {
                     const mongo_id = data._id;
-                    const newjwt = jwt.jwt_sign({email, mongo_id});
+                    const newjwt = jwt.jwt_sign({email, mongo_id, onfido_status});
                     emailSender.send_email(email, newjwt, 'authorize')
                     .then(() => res.status(200).json({data: true}))
                     .catch(() => res.status(400).json({data: false}))
@@ -42,7 +43,8 @@ function post_reset(req, res) {
         if (!err && data && data[0] && data[0]._id) {
             const mongo_id = data[0]._id;
             const email = data[0].email;
-            const newjwt = jwt.jwt_expires({email, mongo_id}, '72h');
+            const onfido_status = data[0].onfido_status
+            const newjwt = jwt.jwt_expires({email, mongo_id, onfido_status}, '72h');
             emailSender.send_email(email, newjwt, 'reset')
             .then(() => res.status(200).json({data: true}))
             .catch(() => res.status(400).json({data: false}))

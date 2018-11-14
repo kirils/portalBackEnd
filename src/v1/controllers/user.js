@@ -10,9 +10,13 @@ function post_login(req, res) {
     userModel.find({email},(err, data) => {
         if (!err && data) {
             const hash = data[0].password;
+            const mongo_id = data[0]._id;
+            const email = data[0].email;
+            const onfido_status = data[0].onfido_status
             bcrypt.compare(plaintextPassword, hash, function(err, data) {
                 if(data === true){
-                    res.status(200).json({data: true})
+                    const token = jwt.jwt_expires({email, mongo_id, onfido_status}, '72h');
+                    res.status(200).json({data: true, token})
                 } else {
                     res.status(400).json({data: false})
                 }
@@ -31,7 +35,8 @@ function post_auth(req, res) {
     const token = bearer[1];
     jwt.jwt_decode(token)
     .then((data) => {
-        res.status(200).json({data: true})
+        const onfido_status = data.onfido_status;
+        res.status(200).json({data: true, onfido_status})
     })
     .catch((err) => {
         res.status(400).json({data: false})
