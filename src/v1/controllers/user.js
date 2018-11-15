@@ -1,8 +1,10 @@
 const userModel = require('../models/user.js')
 const jwt = require('../components/jwt.js');
 const account = require('../components/account.js');
+const onfido = require('../components/onfido.js');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+
 
 function post_login(req, res) {
     const email = req.body.email;
@@ -13,9 +15,10 @@ function post_login(req, res) {
             const mongo_id = data[0]._id;
             const email = data[0].email;
             const onfido_status = data[0].onfido_status
+            const onfido_id = data[0].onfido_id || null
             bcrypt.compare(plaintextPassword, hash, function(err, data) {
                 if(data === true){
-                    const token = jwt.jwt_expires({email, mongo_id, onfido_status}, '72h');
+                    const token = jwt.jwt_expires({email, mongo_id, onfido_status, onfido_id}, '72h');
                     res.status(200).json({data: true, token})
                 } else {
                     res.status(400).json({data: false})
@@ -76,6 +79,8 @@ function post_profile(req, res) {
     const token = bearer[1];
     jwt.jwt_decode(token)
     .then((jwtdata) => {
+        console.log(jwtdata)
+        const onfido_id = jwtdata.onfido_id;
         const email = jwtdata.email;
         const name_first = req.body.name_first;
         const name_middle = req.body.name_middle;
@@ -90,13 +95,17 @@ function post_profile(req, res) {
         const phone_mobile = req.body.phone_mobile;
         const date_birth = req.body.date_birth;
         const gender = req.body.gender;
-        console.log(gender)
         const query = {email}
         const newData = {name_first, name_middle, name_last, address_one, address_two, address_city, address_region, address_zip, address_country, phone_code, phone_mobile, date_birth, gender};
         userModel.findOneAndUpdate(query, newData, {upsert:true}, (err, doc) => {
             if (!err){
-                console.log(doc)
-                res.status(200).json({data: true})
+                onfido.update_applicant(newData, onfido_id)
+                .then(()=>{
+                    res.status(200).json({data: true})
+                })
+                .catch(()=>{
+                    res.status(400).json({data: false})
+                })
             } else {
                 console.log(err)
                 res.status(400).json({data: false})
