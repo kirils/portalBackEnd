@@ -2,9 +2,9 @@ const { Api, JsonRpc, RpcError, JsSignatureProvider } = require('eosjs');
 const fetch = require('node-fetch'); 
 const rpc = new JsonRpc('https://endpoint-1.worbli.io', { fetch });
 
-// const AWS = require('aws-sdk');
-// AWS.config.update({ "accessKeyId": process.env.AWS_ACCESS_KEY_ID_SQS, "secretAccessKey": process.env.AWS_SECRET_ACCESS_KEY_SQS, "region": "us-east-2" });
-// const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
+const AWS = require('aws-sdk');
+AWS.config.update({ "accessKeyId": process.env.AWS_ACCESS_KEY_ID, "secretAccessKey": process.env.AWS_SECRET_ACCESS_KEY, "region": "us-east-1" });
+const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
 
 function create_account(data) {
     return new Promise(function(resolve, reject) {
@@ -12,7 +12,7 @@ function create_account(data) {
             const accountRequest = data;
             const params = {
                 MessageBody: JSON.stringify(accountRequest),
-                QueueUrl: "https://sqs.us-east-2.amazonaws.com/373953752322/user-data"
+                QueueUrl: "https://sqs.us-east-1.amazonaws.com/373953752322/new-accounts"
             };
             sqs.sendMessage(params, function(err, data) {
                 if (err) {
