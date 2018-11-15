@@ -107,9 +107,8 @@ function get_applicant(req, res) {
                 const mongo_id = doc.mongo_id
                 const onfido_status = doc.onfido_status
                 const newjwt = jwt.jwt_sign({email, mongo_id, onfido_status});
-                res.status(200).json({data: true, token: newjwt})
+                res.status(200).json({data: true, token: newjwt, onfido_status:'started'})
             } else {
-                console.log("fail")
                 res.status(400).json({data: false})
             }
         });
@@ -117,15 +116,6 @@ function get_applicant(req, res) {
     .catch((err) => {
         res.status(400).json({data: false})
     })
-
-
-
-    // update status in database
-
-    // make a new token
-
-    // send token and status back to the front end
-
 }
 
 module.exports = { post_applicant, get_applicant};
