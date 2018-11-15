@@ -11,10 +11,8 @@ function create_applicant(data) {
             headers: {'Authorization': `Token token=${process.env.ONFIDO_TOKEN}`},
             body: {first_name, last_name}
         }
-
         fetch.fetch_data(applicant)
         .then((onfido_id) => {
-            console.log(onfido_id)
             resolve(onfido_id.id)
         })
         .catch((err) => {
