@@ -1,4 +1,5 @@
 const userModel = require('../models/user.js')
+const snapShotModel = require('../models/snapShot.js')
 const jwt = require('../components/jwt.js');
 const account = require('../components/account.js');
 const onfido = require('../components/onfido.js');
@@ -155,52 +156,67 @@ function put_profile(req, res) {
 
 
 function post_account(req, res) {
-    // TODO: chdck onfido reports are all good
-    const worbli_account_name = req.body.worbli_account_name;
-    const public_key_active = req.body.public_key_active;
-    const public_key_owner = req.body.public_key_owner;
-    const newAccount = {worbli_account_name, public_key_active, public_key_owner}
-    const bearer = req.headers.authorization.split(" ")
-    const token = bearer[1];
-    let jwtData;
-    jwt.jwt_decode(token)
-    .then((jwtdata) => {
-        jwtData = jwtdata;
-        return account.check_exists(worbli_account_name)
-    })
-    .then((exists) => {
-        if(exists === true){
-            res.status(400).json({data: false})
-        } else {
-            return account.create_account(newAccount)
-        }
-    })
-    .then((data) => {
-        const email = jwtData.email;
-        const newData = {worbli_account_name}
-        const query = {email};
-        userModel.findOneAndUpdate(query, newData, {upsert:true}, (err, doc) => {
-            if (!err){
-                res.status(200).json({data: true})
-            } else {
-                res.status(400).json({data: false})
-            }
-        });
-    })
-    .catch((err) => {
-        res.status(400).json({data: false})
-    })
+        // TODO: check if onfido hass approved this user to have an account
+        const worbli_account_name = req.body.worbli_account_name;
+        const public_key_active = req.body.public_key_active;
+        const public_key_owner = req.body.public_key_owner;
+        const newAccount = {worbli_account_name, public_key_active, public_key_owner}
+        const bearer = req.headers.authorization.split(" ")
+        const token = bearer[1];
+        let jwtData;
+        jwt.jwt_decode(token)
+        .then((jwtdata) => {
+            const email = jwtdata.email;
+            jwtData = jwtdata;
+            userModel.find({email},(err, data) => {
+                if (!err && data && data[0].worbli_account_name) {
+                    res.status(400).json({data: false, error: `You have already claimed the name: ${data[0].worbli_account_name}`})
+                } else {
+                    account.check_exists(worbli_account_name)
+                    .then((exists) => {
+                        if(exists === true || exists === undefined){
+                            res.status(400).json({data: false, error: 'Name already exists'})
+                        } else {
+                            return account.create_account(newAccount)
+                        }
+                    })
+                    .then((data) => {
+                        const email = jwtData.email;
+                        const newData = {worbli_account_name}
+                        const query = {email};
+                        userModel.findOneAndUpdate(query, newData, {upsert:true}, (err, doc) => {
+                            if (!err){
+                                res.status(200).json({data: true})
+                            } else {
+                                res.status(400).json({data: false})
+                            }
+                        });
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                        res.status(400).json({data: false})
+                    })
+                }
+            })
+        })
+  
 }
-
-
 
 function get_account(req, res) {
     console.log(req.body)
     res.json(true)
 }
+
+
 function post_snapshot(req, res) {
-    console.log(req.body)
-    res.json(true)
+    const snap_shot = req.query.account;
+    snapShotModel.find({account_name: snap_shot}, (err, data) => { 
+        if(data[0] && data[0].account_name) {
+            return res.send(data[0]);
+        } else  {
+            return res.send(false);
+        }
+    });  
 }
 
 
