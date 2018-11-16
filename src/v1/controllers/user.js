@@ -79,12 +79,13 @@ function post_profile(req, res) {
     const token = bearer[1];
     jwt.jwt_decode(token)
     .then((jwtdata) => {
-        console.log(jwtdata)
+
         const onfido_id = jwtdata.onfido_id;
         const email = jwtdata.email;
         const name_first = req.body.name_first;
         const name_middle = req.body.name_middle;
         const name_last = req.body.name_last;
+        const address_number = req.body.address_number;
         const address_one = req.body.address_one;
         const address_two = req.body.address_two;
         const address_city = req.body.address_city;
@@ -96,7 +97,7 @@ function post_profile(req, res) {
         const date_birth = req.body.date_birth;
         const gender = req.body.gender;
         const query = {email}
-        const newData = {name_first, name_middle, name_last, address_one, address_two, address_city, address_region, address_zip, address_country, phone_code, phone_mobile, date_birth, gender};
+        const newData = {name_first, name_middle, name_last, address_one, address_two, address_city, address_region, address_zip, address_country, phone_code, phone_mobile, date_birth, gender, address_number};
         userModel.findOneAndUpdate(query, newData, {upsert:true}, (err, doc) => {
             if (!err){
                 onfido.update_applicant(newData, onfido_id)
@@ -117,6 +118,7 @@ function post_profile(req, res) {
     })
 }
 
+
 function get_profile(req, res) {
     const bearer = req.headers.authorization.split(" ")
     const token = bearer[1];
@@ -126,14 +128,25 @@ function get_profile(req, res) {
         userModel.find({email},(err, data) => {
             if (!err && data) {
                 let profile = data[0];
-                profile.password = "*********";
-                res.status(200).json({data: true, profile: profile})
+                onfido.check_images(profile.onfido_id)
+                .then((imageCount) => {
+                    profile.password = "";
+                    profile.onfido_id = "";
+                    const image_count = imageCount;
+                    res.status(200).json({data: true, profile: profile, image_count})
+                })
             } else {
                 res.status(400).json({data: false})
             }
         })
     })
+    .catch((err) => {
+        console.log(err);
+    })
 }
+
+
+
 function put_profile(req, res) {
     console.log(req.body)
     res.json(true)
