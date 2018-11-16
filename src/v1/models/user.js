@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema({
     name_first:             { type: String },
     name_middle:            { type: String },
     name_last:              { type: String },
+    address_number:         { type: Number },
     address_one:            { type: String },
     address_two:            { type: String },
     address_city:           { type: String },
