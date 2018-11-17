@@ -6,7 +6,6 @@ const saltRounds = 10;
  * @returns {SecurityCode}
  */
 function create(req, res) {
-    console.log(req.body)
     const security_code = req.body.security_code;
     const first_name = req.body.first_name;
     const last_name = req.body.family_name;

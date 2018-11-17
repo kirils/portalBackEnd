@@ -6,7 +6,6 @@ const regusterUserModel = require('../models/registerUser.js')
  * @returns {email recipt}
  */
 function validate(req, res) {
-  console.log(req.params);
   const data = req.params.email.split("~");
   const email = data[0];
   const security_code = data[1];

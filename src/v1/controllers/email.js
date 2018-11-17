@@ -2,6 +2,8 @@ const userModel = require('../models/user.js')
 const jwt = require('../components/jwt.js');
 const emailSender = require('../components/email.js');
 const onfido = require('../components/onfido.js');
+var bigInt = require("big-integer");
+var crypto = require('crypto');
 
 function post_authorize(req, res) {
     onfido.create_applicant()
@@ -22,7 +24,8 @@ function post_authorize(req, res) {
                 .catch(() => res.status(400).json({data: false}))
             } else {
                 const onfido_status = 'not started';
-                userModel({email, agreed_terms, agreed_marketing, onfido_status, onfido_id}).save((err, data) => {
+                const security_code = bigInt(Buffer.from(crypto.randomBytes(8)).toString('hex'), 16);
+                userModel({email, agreed_terms, agreed_marketing, onfido_status, onfido_id, security_code}).save((err, data) => {
                     if (!err && data) {
                         const mongo_id = data._id;
                         const newjwt = jwt.jwt_sign({email, mongo_id, onfido_status, onfido_id});

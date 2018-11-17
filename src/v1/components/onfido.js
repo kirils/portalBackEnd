@@ -61,8 +61,6 @@ function update_applicant(data, onfido_id) {
 
 function check_images(onfido_id) {
     return new Promise(function(resolve, reject) {
-        console.log("onfido_id");
-        console.log(onfido_id);
         const applicant = {
             url: `https://api.onfido.com/v2/applicants/${onfido_id}/documents`,
             method: 'GET',
@@ -70,8 +68,14 @@ function check_images(onfido_id) {
         }
         fetch.fetch_data(applicant)
         .then((imageData) => {
-            const docCount = imageData.documents.length;
-            resolve(docCount);
+            if(imageData && imageData.documents && imageData.documents.length >0){
+                const docCount = imageData.documents.length;
+                resolve(docCount);
+            } else {
+                const docCount = 0;
+                resolve(docCount); 
+            }
+
         })
         .catch((err) => {
             reject(err);

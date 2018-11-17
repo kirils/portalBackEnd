@@ -9,7 +9,7 @@ const eos = Eos({httpEndpoint, chainId, keyProvider});
  * @returns {worbliAccountName}
  */
 function create(req, res) {
-    console.log(req.body);
+
     // const worbli_account_name = req.body.worbli_account_name.toLowerCase();
     // const owner_publicKey = req.body.owner_publicKey;
     // const active_publicKey = req.body.active_publicKey;

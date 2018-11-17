@@ -95,10 +95,12 @@ function post_profile(req, res) {
         const address_country = req.body.address_country;
         const phone_code = req.body.phone_code;
         const phone_mobile = req.body.phone_mobile;
-        const date_birth = req.body.date_birth;
+        const date_birth_day = req.body.date_birth_day;
+        const date_birth_month = req.body.date_birth_month;
+        const date_birth_year = req.body.date_birth_year;
         const gender = req.body.gender;
         const query = {email}
-        const newData = {name_first, name_middle, name_last, address_one, address_two, address_city, address_region, address_zip, address_country, phone_code, phone_mobile, date_birth, gender, address_number};
+        const newData = {name_first, name_middle, name_last, address_one, address_two, address_city, address_region, address_zip, address_country, phone_code, phone_mobile, date_birth_day, date_birth_month, date_birth_year, gender, address_number};
         userModel.findOneAndUpdate(query, newData, {upsert:true}, (err, doc) => {
             if (!err){
                 onfido.update_applicant(newData, onfido_id)
@@ -121,6 +123,7 @@ function post_profile(req, res) {
 
 
 function get_profile(req, res) {
+    console.log('get profile')
     const bearer = req.headers.authorization.split(" ")
     const token = bearer[1];
     jwt.jwt_decode(token)

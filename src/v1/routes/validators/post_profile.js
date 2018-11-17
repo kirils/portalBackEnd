@@ -14,7 +14,9 @@ module.exports = {
       address_country: Joi.string().lowercase().max(3).required(),
       phone_code: Joi.string().min(1).max(5).required(),
       phone_mobile: Joi.number().required(),
-      date_birth: Joi.string().lowercase().min(8).max(10).required(),
+      date_birth_day: Joi.number().required(),
+      date_birth_month: Joi.number().required(),
+      date_birth_year: Joi.number().required(),
       gender: Joi.string().lowercase().min(4).max(6).required(),
     }
   }

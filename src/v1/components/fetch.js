@@ -1,7 +1,6 @@
 var unirest = require('unirest');
 
 function fetch_data(data) {
-    console.log(data)
     return new Promise(function(resolve, reject) {
         const url = data.url;
         const method = data.method;

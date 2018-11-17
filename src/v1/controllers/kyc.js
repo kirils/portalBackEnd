@@ -59,4 +59,27 @@ function get_applicant(req, res) {
     })
 }
 
-module.exports = { post_applicant, get_applicant};
+function get_check(req, res) {
+    const bearer = req.headers.authorization.split(" ")
+    const token = bearer[1];
+    jwt.jwt_decode(token)
+    .then((data) => {
+        const onfido_id = data.onfido_id;
+        const type = 'express';
+        
+        const sdk_token = {
+            url: `https://api.onfido.com/v2/applicants/${onfido_id}/checks`,
+            method: 'POST',
+            headers: {'Authorization': `Token token=${process.env.ONFIDO_TOKEN}`},
+            body: {type, 'reports[][name]': 'identity', 'reports[][name]': 'document', 'reports[][name]': 'facial_similarity', 'reports[][name]': 'watchlist'}
+        }
+        console.log(sdk_token)
+        return fetch.fetch_data(sdk_token)
+    })
+    .then((data) => {
+        console.log('--------report')
+        console.log(data)
+    })
+}
+
+module.exports = { post_applicant, get_applicant, get_check};
