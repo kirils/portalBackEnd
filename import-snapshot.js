@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 mongoose.connect(`mongodb://${process.env.DB_HOST}/${process.env.DB_NAME}`, { useNewUrlParser: true });
 
 const snapshotSchema = new mongoose.Schema({
-    account_name:   { type: String, required: true},
+    account_name:   { type: String, required: true, unique: true },
     owner_key:      { type: String, required: true},
     active_key:     { type: String, required: true},
     total_nostake:  { type: Number},
