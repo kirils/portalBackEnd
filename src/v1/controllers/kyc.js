@@ -2,6 +2,7 @@ const jwt = require('../components/jwt.js');
 const fetch = require('../components/fetch.js');
 const onfido = require('../components/onfido.js');
 const userModel = require('../models/user.js');
+const onfidoWebhookModel = require('../models/onfidoWebhook.js');
 
 // gets the jwt for a given acocunt
 function post_applicant(req, res) {
@@ -83,8 +84,20 @@ function get_check(req, res) {
 }
 
 function post_webhook(req, res){
-    console.log(req)
-    res.status(200).json({status: 200})
+    const resource_type = req.payload.resource_type;
+    const action = req.payload.action;
+    const onfido_id = req.payload.object.id;
+    const status = req.payload.object.status;
+    const completed_at = req.payload.object.completed_at;
+    const href = req.payload.object.href;
+    onfidoWebhookModel({resource_type, action, onfido_id, status, completed_at, href}).save((err, data) => {
+        if (!err && data) {
+            res.status(200).json({status: 200})
+        } else {
+            res.status(400).json({status: 400})
+        }
+    })
+    
 }
 
 module.exports = { post_applicant, get_applicant, get_check, post_webhook};
