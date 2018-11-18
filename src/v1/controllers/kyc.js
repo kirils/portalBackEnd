@@ -66,14 +66,14 @@ function get_check(req, res) {
     .then((data) => {
         const onfido_id = data.onfido_id;
         const type = 'express';
-        
+        const reports = [{ name: 'document' }, { name: 'facial_similarity' }, {name: 'identity', variant:'kyc'}, {name: 'watchlist', variant:'full'}];
         const sdk_token = {
             url: `https://api.onfido.com/v2/applicants/${onfido_id}/checks`,
             method: 'POST',
-            headers: {'Authorization': `Token token=${process.env.ONFIDO_TOKEN}`},
-            body: {type, 'reports[][name]': 'identity', 'reports[][name]': 'document', 'reports[][name]': 'facial_similarity', 'reports[][name]': 'watchlist'}
+            headers: {'Authorization': `Token token=${process.env.ONFIDO_TOKEN}`, 'Accept': 'application/json', 'Content-Type': 'application/json'},
+            body: {type, reports}
         }
-        console.log(sdk_token)
+        console.log(sdk_token);
         return fetch.fetch_data(sdk_token)
     })
     .then((data) => {
@@ -83,3 +83,5 @@ function get_check(req, res) {
 }
 
 module.exports = { post_applicant, get_applicant, get_check};
+
+
