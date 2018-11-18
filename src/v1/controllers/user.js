@@ -15,11 +15,12 @@ function post_login(req, res) {
             const hash = data[0].password;
             const mongo_id = data[0]._id;
             const email = data[0].email;
-            const onfido_status = data[0].onfido_status
-            const onfido_id = data[0].onfido_id || null
+            const onfido_status = data[0].onfido_status;
+            const onfido_id = data[0].onfido_id || null;
+            const security_code = data[0].security_code || null;
             bcrypt.compare(plaintextPassword, hash, function(err, data) {
                 if(data === true){
-                    const token = jwt.jwt_expires({email, mongo_id, onfido_status, onfido_id}, '72h');
+                    const token = jwt.jwt_expires({email, onfido_status, onfido_id, security_code}, '72h');
                     res.status(200).json({data: true, token})
                 } else {
                     res.status(400).json({data: false})
@@ -40,7 +41,8 @@ function post_auth(req, res) {
     jwt.jwt_decode(token)
     .then((data) => {
         const onfido_status = data.onfido_status;
-        res.status(200).json({data: true, onfido_status})
+        const security_code = data.security_code;
+        res.status(200).json({data: true, onfido_status, security_code})
     })
     .catch((err) => {
         res.status(400).json({data: false})
