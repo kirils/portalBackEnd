@@ -82,6 +82,11 @@ function get_check(req, res) {
     })
 }
 
-module.exports = { post_applicant, get_applicant, get_check};
+function post_webhook(req, res){
+    console.log(req)
+    res.status(200)
+}
+
+module.exports = { post_applicant, get_applicant, get_check, post_webhook};
 
 
