@@ -84,12 +84,13 @@ function get_check(req, res) {
 }
 
 function post_webhook(req, res){
-    const resource_type = req.payload.resource_type;
-    const action = req.payload.action;
-    const onfido_id = req.payload.object.id;
-    const status = req.payload.object.status;
-    const completed_at = req.payload.object.completed_at;
-    const href = req.payload.object.href;
+    console.log()
+    const resource_type = req.body.payload.resource_type;
+    const action = req.body.payload.action;
+    const onfido_id = req.body.payload.object.id;
+    const status = req.body.payload.object.status;
+    const completed_at = req.body.payload.object.completed_at;
+    const href = req.body.payload.object.href;
     onfidoWebhookModel({resource_type, action, onfido_id, status, completed_at, href}).save((err, data) => {
         if (!err && data) {
             res.status(200).json({status: 200})
