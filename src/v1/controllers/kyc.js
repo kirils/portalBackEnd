@@ -84,7 +84,7 @@ function get_check(req, res) {
 
 function post_webhook(req, res){
     console.log(req)
-    res.status(200)
+    res.status(400).json({status: 200})
 }
 
 module.exports = { post_applicant, get_applicant, get_check, post_webhook};
