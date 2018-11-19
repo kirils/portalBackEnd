@@ -165,13 +165,13 @@ function post_account(req, res) {
         const worbli_account_name = req.body.worbli_account_name;
         const public_key_active = req.body.public_key_active;
         const public_key_owner = req.body.public_key_owner;
-        const newAccount = {worbli_account_name, public_key_active, public_key_owner}
         const bearer = req.headers.authorization.split(" ")
         const token = bearer[1];
         let jwtData;
         jwt.jwt_decode(token)
         .then((jwtdata) => {
             const email = jwtdata.email;
+            const newAccount = {worbli_account_name, public_key_active, public_key_owner, email}
             jwtData = jwtdata;
             userModel.find({email},(err, data) => {
                 if (!err && data && data[0].worbli_account_name) {

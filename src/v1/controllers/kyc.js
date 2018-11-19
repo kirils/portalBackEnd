@@ -91,6 +91,10 @@ function post_webhook(req, res){
     const status = req.body.payload.object.status;
     const completed_at = req.body.payload.object.completed_at;
     const href = req.body.payload.object.href;
+
+
+
+    
     onfidoWebhookModel({resource_type, action, onfido_id, status, completed_at, href}).save((err, data) => {
         if (!err && data) {
             res.status(200).json({status: 200})
