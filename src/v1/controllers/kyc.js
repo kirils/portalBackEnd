@@ -46,9 +46,8 @@ function get_applicant(req, res) {
         userModel.findOneAndUpdate(query, newData, {upsert:true}, (err, doc) => {
             if (!err){
                 const email = doc.email;
-                const mongo_id = doc.mongo_id
                 const onfido_status = doc.onfido_status
-                const newjwt = jwt.jwt_sign({email, mongo_id, onfido_status, onfido_id});
+                const newjwt = jwt.jwt_sign({email, onfido_status, onfido_id});
                 res.status(200).json({data: true, token: newjwt, onfido_status:'started'})
             } else {
                 res.status(400).json({data: false})
@@ -63,23 +62,39 @@ function get_applicant(req, res) {
 function get_check(req, res) {
     const bearer = req.headers.authorization.split(" ")
     const token = bearer[1];
+    let email;
+    let onfido_id;
     jwt.jwt_decode(token)
     .then((data) => {
-        const onfido_id = data.onfido_id;
-        const type = 'express';
-        const reports = [{ name: 'document' }, { name: 'facial_similarity' }, {name: 'identity', variant:'kyc'}, {name: 'watchlist', variant:'full'}];
-        const sdk_token = {
-            url: `https://api.onfido.com/v2/applicants/${onfido_id}/checks`,
-            method: 'POST',
-            headers: {'Authorization': `Token token=${process.env.ONFIDO_TOKEN}`, 'Accept': 'application/json', 'Content-Type': 'application/json'},
-            body: {type, reports}
+        console.log(data)
+        if(data.onfido_status === 'started'){
+            email = data.email;
+            onfido_id = data.onfido_id;
+            const type = 'express';
+            const reports = [{ name: 'document' }, { name: 'facial_similarity' }, {name: 'identity', variant:'kyc'}, {name: 'watchlist', variant:'full'}];
+            const sdk_token = {
+                url: `https://api.onfido.com/v2/applicants/${onfido_id}/checks`,
+                method: 'POST',
+                headers: {'Authorization': `Token token=${process.env.ONFIDO_TOKEN}`, 'Accept': 'application/json', 'Content-Type': 'application/json'},
+                body: {type, reports}
+            }
+            console.log(sdk_token);
+            return fetch.fetch_data(sdk_token)
         }
-        console.log(sdk_token);
-        return fetch.fetch_data(sdk_token)
     })
     .then((data) => {
-        console.log('--------report')
-        console.log(data)
+        const onfido_status = 'review'
+        const newjwt = jwt.jwt_sign({email, onfido_status, onfido_id});
+        const newData = {onfido_status};
+        const query = {email};
+        userModel.findOneAndUpdate(query, newData, {upsert:true}, (err, doc) => {
+            if(!err){
+                res.status(200).json({data: true, token: newjwt, onfido_status})
+            }
+        })
+    })
+    .catch((err) => {
+        console.log(err)
     })
 }
 
@@ -91,10 +106,6 @@ function post_webhook(req, res){
     const status = req.body.payload.object.status;
     const completed_at = req.body.payload.object.completed_at;
     const href = req.body.payload.object.href;
-
-
-
-    
     onfidoWebhookModel({resource_type, action, onfido_id, status, completed_at, href}).save((err, data) => {
         if (!err && data) {
             res.status(200).json({status: 200})
@@ -102,9 +113,38 @@ function post_webhook(req, res){
             res.status(400).json({status: 400})
         }
     })
-    
 }
 
-module.exports = { post_applicant, get_applicant, get_check, post_webhook};
+function get_status(req, res){
+    const bearer = req.headers.authorization.split(" ")
+    const token = bearer[1];
+    let email;
+    jwt.jwt_decode(token)
+    .then((data) => {
+        const onfido_id = data.onfido_id;
+        const sdk_token = {
+            url: `https://api.onfido.com/v2/applicants/${onfido_id}/checks`,
+            method: 'GET',
+            headers: {'Authorization': `Token token=${process.env.ONFIDO_TOKEN}`},
+        }
+        return fetch.fetch_data(sdk_token)
+    })
+    .then((data) => {
+        const parse = JSON.parse(data) 
+        console.log(parse);
+        // TODO: find the last one, dont use the first one
+        const report1 = (parse.checks[0].reports[0]);
+        const report2 = (parse.checks[0].reports[1]);
+        const report3 = (parse.checks[0].reports[2]);
+        const report4 = (parse.checks[0].reports[3]);
+        console.log(report1);
+        console.log(report2);
+        console.log(report3);
+        console.log(report4);
+        res.status(200).json({status: 200})
+    })
+}
+
+module.exports = { post_applicant, get_applicant, get_check, post_webhook, get_status};
 
 

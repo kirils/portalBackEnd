@@ -27,7 +27,10 @@ function update_applicant(data, onfido_id) {
         const middle_name = data.name_middle
         const last_name = data.name_last;
         const gender = data.gender;
-        const dob = data.date_birth;
+        const date_birth_day = data.date_birth_day;
+        const date_birth_month = data.date_birth_month;
+        const date_birth_year = data.date_birth_year;
+        const dob = `${date_birth_year}-${date_birth_month}-${date_birth_day}`;
         const country = data.address_country;
         const postcode = data.address_zip;
         const state = data.address_region;

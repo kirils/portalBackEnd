@@ -6,7 +6,6 @@ const onfido = require('../components/onfido.js');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
-
 function post_login(req, res) {
     const email = req.body.email;
     const plaintextPassword = req.body.password;
@@ -21,7 +20,7 @@ function post_login(req, res) {
             bcrypt.compare(plaintextPassword, hash, function(err, data) {
                 if(data === true){
                     const token = jwt.jwt_expires({email, onfido_status, onfido_id, security_code}, '72h');
-                    res.status(200).json({data: true, token})
+                    res.status(200).json({data: true, token, onfido_status})
                 } else {
                     res.status(400).json({data: false})
                 }
@@ -31,9 +30,6 @@ function post_login(req, res) {
         }
     })
 }
-
-
-
 
 function post_auth(req, res) {
     const bearer = req.headers.authorization.split(" ")
@@ -48,7 +44,6 @@ function post_auth(req, res) {
         res.status(400).json({data: false})
     })
 }
-
 
 function post_password(req, res) {
     const plaintextPassword = req.body.password;
@@ -82,50 +77,51 @@ function post_profile(req, res) {
     const token = bearer[1];
     jwt.jwt_decode(token)
     .then((jwtdata) => {
-
-        const onfido_id = jwtdata.onfido_id;
-        const email = jwtdata.email;
-        const name_first = req.body.name_first;
-        const name_middle = req.body.name_middle;
-        const name_last = req.body.name_last;
-        const address_number = req.body.address_number;
-        const address_one = req.body.address_one;
-        const address_two = req.body.address_two;
-        const address_city = req.body.address_city;
-        const address_region = req.body.address_region;
-        const address_zip = req.body.address_zip;
-        const address_country = req.body.address_country;
-        const phone_code = req.body.phone_code;
-        const phone_mobile = req.body.phone_mobile;
-        const date_birth_day = req.body.date_birth_day;
-        const date_birth_month = req.body.date_birth_month;
-        const date_birth_year = req.body.date_birth_year;
-        const gender = req.body.gender;
-        const query = {email}
-        const newData = {name_first, name_middle, name_last, address_one, address_two, address_city, address_region, address_zip, address_country, phone_code, phone_mobile, date_birth_day, date_birth_month, date_birth_year, gender, address_number};
-        userModel.findOneAndUpdate(query, newData, {upsert:true}, (err, doc) => {
-            if (!err){
-                onfido.update_applicant(newData, onfido_id)
-                .then(()=>{
-                    res.status(200).json({data: true})
-                })
-                .catch(()=>{
+        if(jwtdata.onfido_status === 'default' || jwtdata.onfido_status === 'started'){
+            const onfido_status = 'started';
+            const onfido_id = jwtdata.onfido_id;
+            const email = jwtdata.email;
+            const name_first = req.body.name_first;
+            const name_middle = req.body.name_middle;
+            const name_last = req.body.name_last;
+            const address_number = req.body.address_number;
+            const address_one = req.body.address_one;
+            const address_two = req.body.address_two;
+            const address_city = req.body.address_city;
+            const address_region = req.body.address_region;
+            const address_zip = req.body.address_zip;
+            const address_country = req.body.address_country;
+            const phone_code = req.body.phone_code;
+            const phone_mobile = req.body.phone_mobile;
+            const date_birth_day = req.body.date_birth_day;
+            const date_birth_month = req.body.date_birth_month;
+            const date_birth_year = req.body.date_birth_year;
+            const gender = req.body.gender;
+            const query = {email}
+            const newData = {name_first, name_middle, name_last, address_one, address_two, address_city, address_region, address_zip, address_country, phone_code, phone_mobile, date_birth_day, date_birth_month, date_birth_year, gender, address_number, onfido_status};
+            userModel.findOneAndUpdate(query, newData, {upsert:true}, (err, doc) => {
+                if (!err){
+                    onfido.update_applicant(newData, onfido_id)
+                    .then(()=>{
+                        const newjwt = jwt.jwt_sign({email, onfido_status, onfido_id});
+                        res.status(200).json({data: true, newjwt})
+                    })
+                    .catch(()=>{
+                        res.status(400).json({data: false})
+                    })
+                } else {
+                    console.log(err)
                     res.status(400).json({data: false})
-                })
-            } else {
-                console.log(err)
-                res.status(400).json({data: false})
-            }
-        });
+                }
+            });
+        }
     })
     .catch((jwtdata) => {
         res.status(400).json({data: false})
     })
 }
 
-
 function get_profile(req, res) {
-    console.log('get profile')
     const bearer = req.headers.authorization.split(" ")
     const token = bearer[1];
     jwt.jwt_decode(token)
@@ -151,14 +147,10 @@ function get_profile(req, res) {
     })
 }
 
-
-
 function put_profile(req, res) {
     console.log(req.body)
     res.json(true)
 }
-
-
 
 function post_account(req, res) {
         // TODO: check if onfido hass approved this user to have an account
@@ -212,7 +204,6 @@ function get_account(req, res) {
     res.json(true)
 }
 
-
 function post_snapshot(req, res) {
     const snap_shot = req.query.account;
     snapShotModel.find({account_name: snap_shot}, (err, data) => { 
@@ -223,6 +214,5 @@ function post_snapshot(req, res) {
         }
     });  
 }
-
 
 module.exports = { post_login, post_auth, post_profile, get_profile, put_profile, post_account, get_account, post_snapshot, post_password};
