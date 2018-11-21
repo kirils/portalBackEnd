@@ -190,6 +190,8 @@ function post_account(req, res) {
         let jwtData;
         jwt.jwt_decode(token)
         .then((jwtdata) => {
+            console.log('-------------------------------- JWT -------------------------')
+            console.log(jwtdata);
             const email = jwtdata.email;
             const newAccount = {worbli_account_name, public_key_active, public_key_owner, email}
             jwtData = jwtdata;
@@ -206,6 +208,8 @@ function post_account(req, res) {
                         }
                     })
                     .then((data) => {
+                        console.log('-------------------------------- Q ID -------------------------')
+                        console.log(data);
                         const email = jwtData.email;
                         const newData = {worbli_account_name}
                         const query = {email};
