@@ -130,17 +130,45 @@ function get_status(req, res){
         return fetch.fetch_data(sdk_token)
     })
     .then((data) => {
-        const parse = JSON.parse(data) 
-        console.log(parse);
-        // TODO: find the last one, dont use the first one
-        const report1 = (parse.checks[0].reports[0]);
-        const report2 = (parse.checks[0].reports[1]);
-        const report3 = (parse.checks[0].reports[2]);
-        const report4 = (parse.checks[0].reports[3]);
-        console.log(report1);
-        console.log(report2);
-        console.log(report3);
-        console.log(report4);
+        // const parse = JSON.parse(data) 
+        // console.log(parse);
+        // // TODO: find the last one, dont use the first one
+        // const report1 = (parse.checks[0].reports[0]);
+        // const report2 = (parse.checks[0].reports[1]);
+        // const report3 = (parse.checks[0].reports[2]);
+        // const report4 = (parse.checks[0].reports[3]);
+        // console.log(report1);
+        // console.log(report2);
+        // console.log(report3);
+        // console.log(report4);
+
+        // const sdk_token = {
+        //     url: `https://api.onfido.com/v2/applicants/${onfido_id}/checks`,
+        //     method: 'GET',
+        //     headers: {'Authorization': `Token token=${process.env.ONFIDO_TOKEN}`},
+        // }
+
+        // const sdk_token = {
+        //     url: `https://api.onfido.com/v2/applicants/${onfido_id}/checks`,
+        //     method: 'GET',
+        //     headers: {'Authorization': `Token token=${process.env.ONFIDO_TOKEN}`},
+        // }
+
+        // const sdk_token = {
+        //     url: `https://api.onfido.com/v2/applicants/${onfido_id}/checks`,
+        //     method: 'GET',
+        //     headers: {'Authorization': `Token token=${process.env.ONFIDO_TOKEN}`},
+        // }
+
+        // const sdk_token = {
+        //     url: `https://api.onfido.com/v2/applicants/${onfido_id}/checks`,
+        //     method: 'GET',
+        //     headers: {'Authorization': `Token token=${process.env.ONFIDO_TOKEN}`},
+        // }
+
+
+
+
         res.status(200).json({status: 200})
     })
 }

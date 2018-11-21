@@ -31,26 +31,53 @@ function update_applicant(data, onfido_id) {
         const date_birth_month = data.date_birth_month;
         const date_birth_year = data.date_birth_year;
         const dob = `${date_birth_year}-${date_birth_month}-${date_birth_day}`;
-        const country = data.address_country;
-        const postcode = data.address_zip;
-        const state = data.address_region;
-        const town = data.address_city;
+        
+        const flat_number = data.address_flat_number;
+        const building_name = data.address_building_name;
+        const building_number = data.address_building_number;
         const street = data.address_one;
+        const sub_street = data.address_two;
+        const state = data.address_state;
+        const town = data.address_town;
+        const postcode = data.address_zip;
+        const country = data.address_country;
+        
         const onfidoid = onfido_id;
         const mobile = `+ ${data.phone_code} ${data.phone_mobile}`;
-        const building_number = data.address_number
-
-        const applicant = {
+        const rowApplicant = {
             url: `https://api.onfido.com/v2/applicants/${onfidoid}`,
             method: 'PUT',
             headers: {'Authorization': `Token token=${process.env.ONFIDO_TOKEN}`},
             body: {first_name, last_name, middle_name, country, dob, mobile, gender,
+            'addresses[][flat_number]': flat_number,
+            'addresses[][building_name]': building_name,
             'addresses[][building_number]': building_number,
             'addresses[][street]': street,
+            'addresses[][sub_street]': sub_street,
             'addresses[][town]': town,
-            'addresses[][state]': state,
             'addresses[][postcode]': postcode,
             'addresses[][country]': country }
+        }
+        const usaApplicant = {
+            url: `https://api.onfido.com/v2/applicants/${onfidoid}`,
+            method: 'PUT',
+            headers: {'Authorization': `Token token=${process.env.ONFIDO_TOKEN}`},
+            body: {first_name, last_name, middle_name, country, dob, mobile, gender,
+            'addresses[][flat_number]': flat_number,
+            'addresses[][building_name]': building_name,
+            'addresses[][building_number]': building_number,
+            'addresses[][street]': street,
+            'addresses[][sub_street]': sub_street,
+            'addresses[][state]': state,
+            'addresses[][town]': town,
+            'addresses[][postcode]': postcode,
+            'addresses[][country]': country }
+        }
+        let applicant
+        if(country === 'USA'){
+           applicant = usaApplicant;
+        } else {
+            applicant = rowApplicant;
         }
         fetch.fetch_data(applicant)
         .then((onfido_id) => {

@@ -84,13 +84,17 @@ function post_profile(req, res) {
             const name_first = req.body.name_first;
             const name_middle = req.body.name_middle;
             const name_last = req.body.name_last;
-            const address_number = req.body.address_number;
-            const address_one = req.body.address_one;
-            const address_two = req.body.address_two;
-            const address_city = req.body.address_city;
-            const address_region = req.body.address_region;
-            const address_zip = req.body.address_zip;
+            
             const address_country = req.body.address_country;
+            const address_zip = req.body.address_zip;
+            const address_town = req.body.address_town;
+            const address_flat_number = req.body.address_flat_number || "";
+            const address_building_name = req.body.address_building_name || "";
+            const address_building_number = req.body.address_building_number || "";
+            const address_one = req.body.address_one || "";
+            const address_two = req.body.address_two || "";            
+            const address_state = req.body.address_state || "";
+            
             const phone_code = req.body.phone_code;
             const phone_mobile = req.body.phone_mobile;
             const date_birth_day = req.body.date_birth_day;
@@ -98,7 +102,28 @@ function post_profile(req, res) {
             const date_birth_year = req.body.date_birth_year;
             const gender = req.body.gender;
             const query = {email}
-            const newData = {name_first, name_middle, name_last, address_one, address_two, address_city, address_region, address_zip, address_country, phone_code, phone_mobile, date_birth_day, date_birth_month, date_birth_year, gender, address_number, onfido_status};
+
+            const newData = {
+                name_first, 
+                name_middle, 
+                name_last, 
+                address_country, 
+                address_zip, 
+                address_town, 
+                address_flat_number,
+                address_building_name,
+                address_building_number,
+                address_one, 
+                address_two, 
+                address_state, 
+                phone_code, 
+                phone_mobile, 
+                date_birth_day, 
+                date_birth_month, 
+                date_birth_year, 
+                gender, 
+                onfido_status
+            };
             userModel.findOneAndUpdate(query, newData, {upsert:true}, (err, doc) => {
                 if (!err){
                     onfido.update_applicant(newData, onfido_id)
