@@ -119,57 +119,35 @@ function get_status(req, res){
     const bearer = req.headers.authorization.split(" ")
     const token = bearer[1];
     let email;
+    let onfido_id;
     jwt.jwt_decode(token)
     .then((data) => {
-        const onfido_id = data.onfido_id;
-        const sdk_token = {
-            url: `https://api.onfido.com/v2/applicants/${onfido_id}/checks`,
-            method: 'GET',
-            headers: {'Authorization': `Token token=${process.env.ONFIDO_TOKEN}`},
+        email = data.email;
+        onfido_id = data.onfido_id;
+        if(data.onfido_status === 'review'){
+            const sdk_token = {
+                url: `https://api.onfido.com/v2/applicants/${onfido_id}/checks`,
+                method: 'GET',
+                headers: {'Authorization': `Token token=${process.env.ONFIDO_TOKEN}`},
+            }
+            return fetch.fetch_data(sdk_token);
         }
-        return fetch.fetch_data(sdk_token)
     })
     .then((data) => {
-        // const parse = JSON.parse(data) 
-        // console.log(parse);
-        // // TODO: find the last one, dont use the first one
-        // const report1 = (parse.checks[0].reports[0]);
-        // const report2 = (parse.checks[0].reports[1]);
-        // const report3 = (parse.checks[0].reports[2]);
-        // const report4 = (parse.checks[0].reports[3]);
-        // console.log(report1);
-        // console.log(report2);
-        // console.log(report3);
-        // console.log(report4);
-
-        // const sdk_token = {
-        //     url: `https://api.onfido.com/v2/applicants/${onfido_id}/checks`,
-        //     method: 'GET',
-        //     headers: {'Authorization': `Token token=${process.env.ONFIDO_TOKEN}`},
-        // }
-
-        // const sdk_token = {
-        //     url: `https://api.onfido.com/v2/applicants/${onfido_id}/checks`,
-        //     method: 'GET',
-        //     headers: {'Authorization': `Token token=${process.env.ONFIDO_TOKEN}`},
-        // }
-
-        // const sdk_token = {
-        //     url: `https://api.onfido.com/v2/applicants/${onfido_id}/checks`,
-        //     method: 'GET',
-        //     headers: {'Authorization': `Token token=${process.env.ONFIDO_TOKEN}`},
-        // }
-
-        // const sdk_token = {
-        //     url: `https://api.onfido.com/v2/applicants/${onfido_id}/checks`,
-        //     method: 'GET',
-        //     headers: {'Authorization': `Token token=${process.env.ONFIDO_TOKEN}`},
-        // }
-
-
-
-
-        res.status(200).json({status: 200})
+        const parse = JSON.parse(data)
+        if (parse.checks[0].result === 'clear'){
+            const onfido_status = 'approved'
+            const newjwt = jwt.jwt_sign({email, onfido_status, onfido_id});
+            const newData = {onfido_status};
+            const query = {email};
+            userModel.findOneAndUpdate(query, newData, {upsert:true}, (err, doc) => {
+                if(!err){
+                    res.status(200).json({data: true, token: newjwt, onfido_status})
+                }
+            })
+        } else {
+            res.status(400).json({status: 400, data: false})
+        }
     })
 }
 

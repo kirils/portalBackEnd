@@ -105,7 +105,6 @@ function check_images(onfido_id) {
                 const docCount = 0;
                 resolve(docCount); 
             }
-
         })
         .catch((err) => {
             reject(err);
