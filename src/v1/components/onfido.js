@@ -44,7 +44,7 @@ function update_applicant(data, onfido_id) {
         
         const onfidoid = onfido_id;
         const mobile = `+ ${data.phone_code} ${data.phone_mobile}`;
-        const rowApplicant = {
+        const applicant = {
             url: `https://api.onfido.com/v2/applicants/${onfidoid}`,
             method: 'PUT',
             headers: {'Authorization': `Token token=${process.env.ONFIDO_TOKEN}`},
@@ -54,31 +54,12 @@ function update_applicant(data, onfido_id) {
             'addresses[][building_number]': building_number,
             'addresses[][street]': street,
             'addresses[][sub_street]': sub_street,
-            'addresses[][town]': town,
-            'addresses[][postcode]': postcode,
-            'addresses[][country]': country }
-        }
-        const usaApplicant = {
-            url: `https://api.onfido.com/v2/applicants/${onfidoid}`,
-            method: 'PUT',
-            headers: {'Authorization': `Token token=${process.env.ONFIDO_TOKEN}`},
-            body: {first_name, last_name, middle_name, country, dob, mobile, gender,
-            'addresses[][flat_number]': flat_number,
-            'addresses[][building_name]': building_name,
-            'addresses[][building_number]': building_number,
-            'addresses[][street]': street,
-            'addresses[][sub_street]': sub_street,
-            'addresses[][state]': state,
             'addresses[][town]': town,
             'addresses[][postcode]': postcode,
             'addresses[][country]': country }
         }
         let applicant
-        if(country === 'USA'){
-           applicant = usaApplicant;
-        } else {
-            applicant = rowApplicant;
-        }
+
         fetch.fetch_data(applicant)
         .then((onfido_id) => {
             resolve(onfido_id.id)

@@ -4,7 +4,6 @@ module.exports = {
   validate: {
     body: {
       name_first: Joi.string().lowercase().min(1).max(35).required(),
-      name_middle: Joi.string().lowercase().max(35),
       name_last: Joi.string().lowercase().max(35).required(),
       address_country: Joi.string().lowercase().max(3).required(),
       address_zip: Joi.string().lowercase().alphanum().max(15).required(),
