@@ -11,7 +11,7 @@ const limiter = rateLimit({
     max: 100
 });
 
-const whitelist = process.env.FRONT_END_URL
+const whitelist = process.env.CORS_WHITELIST
 
 const corsOptions = {
     origin: function (origin, callback) {
