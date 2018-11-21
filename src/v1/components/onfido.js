@@ -57,9 +57,9 @@ function update_applicant(data, onfido_id) {
             'addresses[][town]': town,
             'addresses[][postcode]': postcode,
             'addresses[][country]': country }
-        }
-        let applicant
-
+        } 
+        console.log('-----------------------------------------------');
+        console.log(applicant);
         fetch.fetch_data(applicant)
         .then((onfido_id) => {
             resolve(onfido_id.id)
