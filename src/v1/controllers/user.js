@@ -156,7 +156,7 @@ function get_profile(req, res) {
     .then((jwtdata) => {
         const email = jwtdata.email;
         userModel.find({email},(err, data) => {
-            if (!err && data) {
+            if (!err && data && data[0]) {
                 let profile = data[0];
                 onfido.check_images(profile.onfido_id)
                 .then((imageCount) => {

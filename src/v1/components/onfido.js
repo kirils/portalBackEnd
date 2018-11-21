@@ -43,10 +43,11 @@ function update_applicant(data, onfido_id) {
         const country = data.address_country;
         
         const onfidoid = onfido_id;
-        console.log('---------------------X--------------------------');
+        console.log('--------------------- ONFIDO ID--------------------------');
         console.log(onfidoid);
-        const mobile = `+ ${data.phone_code} ${data.phone_mobile}`;
-        const applicant = {
+        const mobile = `+${data.phone_code} ${data.phone_mobile}`;
+
+        const rowApplicant = {
             url: `https://api.onfido.com/v2/applicants/${onfidoid}`,
             method: 'PUT',
             headers: {'Authorization': `Token token=${process.env.ONFIDO_TOKEN}`},
@@ -60,16 +61,40 @@ function update_applicant(data, onfido_id) {
             'addresses[][postcode]': postcode,
             'addresses[][country]': country }
         } 
-        console.log('---------------------A--------------------------');
+        const usApplicant = {
+            url: `https://api.onfido.com/v2/applicants/${onfidoid}`,
+            method: 'PUT',
+            headers: {'Authorization': `Token token=${process.env.ONFIDO_TOKEN}`},
+            body: {first_name, last_name, middle_name, country, dob, mobile, gender,
+            'addresses[][flat_number]': flat_number,
+            'addresses[][building_name]': building_name,
+            'addresses[][building_number]': building_number,
+            'addresses[][street]': street,
+            'addresses[][sub_street]': sub_street,
+            'addresses[][town]': town,
+            'addresses[][state]': state,
+            'addresses[][postcode]': postcode,
+            'addresses[][country]': country }
+        } 
+
+        console.log('--------------------- COUNTRY --------------------------');
+        console.log(country)
+        let applicant;
+        if(country == 'usa'){
+            applicant = usApplicant;
+        } else {
+            applicant = rowApplicant;
+        }
+        console.log('--------------------- APPLICANT --------------------------');
         console.log(applicant);
         fetch.fetch_data(applicant)
         .then((onfido_id) => {
-            console.log('-----------------------B------------------------');
+            console.log('----------------------- PASS ------------------------');
             console.log(onfido_id);
             resolve(onfido_id.id);
         })
         .catch((err) => {
-            console.log('-----------------------C------------------------');
+            console.log('----------------------- ERROR ------------------------');
             console.log(err);
             reject(err);
         })
