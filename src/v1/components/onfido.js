@@ -43,6 +43,8 @@ function update_applicant(data, onfido_id) {
         const country = data.address_country;
         
         const onfidoid = onfido_id;
+        console.log('---------------------X--------------------------');
+        console.log(onfidoid);
         const mobile = `+ ${data.phone_code} ${data.phone_mobile}`;
         const applicant = {
             url: `https://api.onfido.com/v2/applicants/${onfidoid}`,
@@ -58,13 +60,17 @@ function update_applicant(data, onfido_id) {
             'addresses[][postcode]': postcode,
             'addresses[][country]': country }
         } 
-        console.log('-----------------------------------------------');
+        console.log('---------------------A--------------------------');
         console.log(applicant);
         fetch.fetch_data(applicant)
         .then((onfido_id) => {
-            resolve(onfido_id.id)
+            console.log('-----------------------B------------------------');
+            console.log(onfido_id);
+            resolve(onfido_id.id);
         })
         .catch((err) => {
+            console.log('-----------------------C------------------------');
+            console.log(err);
             reject(err);
         })
     })
