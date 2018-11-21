@@ -11,8 +11,16 @@ const limiter = rateLimit({
     max: 100
 });
 
+const whitelist = process.env.FRONT_END_URL
+
 const corsOptions = {
-    origin: process.env.FRONT_END_URL,
+    origin: function (origin, callback) {
+        if (whitelist.indexOf(origin) !== -1) {
+          callback(null, true)
+        } else {
+          callback(new Error('Not allowed by CORS'))
+        }
+    },
     allowedHeaders: ['Content-Type', 'Authorization', 'Content-Length', 'X-Requested-With', 'Accept'],
     methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
     optionsSuccessStatus: 200
