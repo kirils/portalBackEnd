@@ -40,7 +40,7 @@ function update_applicant(data, onfido_id) {
         const state = data.address_state;
         const town = data.address_town;
         const postcode = data.address_zip;
-        const country = data.address_country;
+        const country = data.address_country.toUpperCase();
         
         const onfidoid = onfido_id;
         console.log('--------------------- ONFIDO ID--------------------------');
@@ -50,6 +50,7 @@ function update_applicant(data, onfido_id) {
         const rowApplicant = {
             url: `https://api.onfido.com/v2/applicants/${onfidoid}`,
             method: 'PUT',
+            // headers: {'Authorization': `Token token=${process.env.ONFIDO_TOKEN}`, 'Accept': 'application/json', 'Content-Type': 'application/json'},
             headers: {'Authorization': `Token token=${process.env.ONFIDO_TOKEN}`},
             body: {first_name, last_name, middle_name, country, dob, mobile, gender,
             'addresses[][flat_number]': flat_number,
@@ -61,9 +62,11 @@ function update_applicant(data, onfido_id) {
             'addresses[][postcode]': postcode,
             'addresses[][country]': country }
         } 
+
         const usApplicant = {
             url: `https://api.onfido.com/v2/applicants/${onfidoid}`,
             method: 'PUT',
+            // headers: {'Authorization': `Token token=${process.env.ONFIDO_TOKEN}`, 'Accept': 'application/json', 'Content-Type': 'application/json'},
             headers: {'Authorization': `Token token=${process.env.ONFIDO_TOKEN}`},
             body: {first_name, last_name, middle_name, country, dob, mobile, gender,
             'addresses[][flat_number]': flat_number,
@@ -80,7 +83,7 @@ function update_applicant(data, onfido_id) {
         console.log('--------------------- COUNTRY --------------------------');
         console.log(country)
         let applicant;
-        if(country == 'usa'){
+        if (country == 'usa' || country == 'USA'){
             applicant = usApplicant;
         } else {
             applicant = rowApplicant;
