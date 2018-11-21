@@ -10,7 +10,7 @@ function post_login(req, res) {
     const email = req.body.email;
     const plaintextPassword = req.body.password;
     userModel.find({email},(err, data) => {
-        if (!err && data) {
+        if (!err && data && data[0] && data[0].password) {
             const hash = data[0].password;
             const mongo_id = data[0]._id;
             const email = data[0].email;
@@ -145,6 +145,9 @@ function post_profile(req, res) {
         res.status(400).json({data: false})
     })
 }
+
+
+
 
 function get_profile(req, res) {
     const bearer = req.headers.authorization.split(" ")
