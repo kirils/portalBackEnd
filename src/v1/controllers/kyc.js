@@ -71,13 +71,14 @@ function get_check(req, res) {
         if(data.onfido_status === 'started'){
             email = data.email;
             onfido_id = data.onfido_id;
+            const async = true;
             const type = 'express';
             const reports = [{ name: 'document' }, { name: 'facial_similarity' }, {name: 'identity', variant:'kyc'}, {name: 'watchlist', variant:'full'}];
             const sdk_token = {
                 url: `https://api.onfido.com/v2/applicants/${onfido_id}/checks`,
                 method: 'POST',
                 headers: {'Authorization': `Token token=${process.env.ONFIDO_TOKEN}`, 'Accept': 'application/json', 'Content-Type': 'application/json'},
-                body: {type, reports}
+                body: {type, reports, async}
             }
             console.log(sdk_token);
             return fetch.fetch_data(sdk_token)
