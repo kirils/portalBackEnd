@@ -11,9 +11,9 @@ const userSchema = new mongoose.Schema({
     name_last:              { type: String },
     
     address_country:        { type: String },
-    address_flat_number:    { type: Number },
+    address_flat_number:    { type: String },
     address_building_name:  { type: String },
-    address_building_number:{ type: Number },
+    address_building_number:{ type: String },
     address_one:            { type: String },
     address_two:            { type: String },
     address_state:          { type: String },
