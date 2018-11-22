@@ -181,7 +181,6 @@ function put_profile(req, res) {
 }
 
 function post_account(req, res) {
-        // TODO: check if onfido hass approved this user to have an account
         const worbli_account_name = req.body.worbli_account_name;
         const public_key_active = req.body.public_key_active;
         const public_key_owner = req.body.public_key_owner;
@@ -190,8 +189,7 @@ function post_account(req, res) {
         let jwtData;
         jwt.jwt_decode(token)
         .then((jwtdata) => {
-            console.log('-------------------------------- JWT -------------------------')
-            console.log(jwtdata);
+            const onfido_id = jwtdata.onfido_id;
             const email = jwtdata.email;
             const newAccount = {worbli_account_name, public_key_active, public_key_owner, email}
             jwtData = jwtdata;
@@ -208,14 +206,14 @@ function post_account(req, res) {
                         }
                     })
                     .then((data) => {
-                        console.log('-------------------------------- Q ID -------------------------')
-                        console.log(data);
                         const email = jwtData.email;
-                        const newData = {worbli_account_name}
+                        const onfido_status = 'started';
+                        const newData = {worbli_account_name, onfido_status}
                         const query = {email};
                         userModel.findOneAndUpdate(query, newData, {upsert:true}, (err, doc) => {
                             if (!err){
-                                res.status(200).json({data: true})
+                                const newjwt = jwt.jwt_sign({email, onfido_status, onfido_id});
+                                res.status(200).json({data: true, newjwt})
                             } else {
                                 res.status(400).json({data: false})
                             }
@@ -247,4 +245,19 @@ function post_snapshot(req, res) {
     });  
 }
 
-module.exports = { post_login, post_auth, post_profile, get_profile, put_profile, post_account, get_account, post_snapshot, post_password};
+function get_sharedrop(){
+    const bearer = req.headers.authorization.split(" ")
+    const token = bearer[1];
+    jwt.jwt_decode(token)
+    .then((jwtdata) => {
+        const email = jwtdata.email;
+        userModel.find({email},(err, data) => {
+            if (!err && data && data[0] && data[0].security_code) {
+                const security_code = data[0].security_code;
+                res.status(200).json({data: true, security_code})
+            }
+        })
+    })
+}
+
+module.exports = { post_login, post_auth, post_profile, get_profile, put_profile, post_account, get_account, post_snapshot, post_password, get_sharedrop};
