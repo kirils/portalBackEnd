@@ -245,7 +245,7 @@ function post_snapshot(req, res) {
     });  
 }
 
-function get_sharedrop(){
+function get_sharedrop(req, res){
     const bearer = req.headers.authorization.split(" ")
     const token = bearer[1];
     jwt.jwt_decode(token)
