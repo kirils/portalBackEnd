@@ -60,6 +60,7 @@ function get_applicant(req, res) {
 }
 
 function get_check(req, res) {
+    const t0 = performance.now();
     const bearer = req.headers.authorization.split(" ")
     const token = bearer[1];
     let email;
@@ -83,6 +84,9 @@ function get_check(req, res) {
         }
     })
     .then((data) => {
+        const t1 = performance.now();
+        console.log('---------------- GET CHECK TOOOK THIS LONG ----------------------')
+        console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.")
         const onfido_status = 'review'
         const newjwt = jwt.jwt_sign({email, onfido_status, onfido_id});
         const newData = {onfido_status};
