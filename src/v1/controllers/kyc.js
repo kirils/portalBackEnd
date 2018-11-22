@@ -60,7 +60,7 @@ function get_applicant(req, res) {
 }
 
 function get_check(req, res) {
-    const t0 = performance.now();
+    const t0 = (new Date).getTime();
     const bearer = req.headers.authorization.split(" ")
     const token = bearer[1];
     let email;
@@ -84,7 +84,7 @@ function get_check(req, res) {
         }
     })
     .then((data) => {
-        const t1 = performance.now();
+        const t1 = (new Date).getTime();
         console.log('---------------- GET CHECK TOOOK THIS LONG ----------------------')
         console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.")
         const onfido_status = 'review'
