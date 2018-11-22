@@ -116,12 +116,15 @@ function post_webhook(req, res){
 }
 
 function get_status(req, res){
+    console.log('----------- GET STATUS -------------')
     const bearer = req.headers.authorization.split(" ")
     const token = bearer[1];
     let email;
     let onfido_id;
     jwt.jwt_decode(token)
     .then((data) => {
+        console.log('----------- JWT DATA -------------')
+        console.log(data)
         email = data.email;
         onfido_id = data.onfido_id;
         if(data.onfido_status === 'review'){
@@ -131,21 +134,31 @@ function get_status(req, res){
                 headers: {'Authorization': `Token token=${process.env.ONFIDO_TOKEN}`},
             }
             return fetch.fetch_data(sdk_token);
+        } else {
+            console.log('----------- NOT REVIEW STATUS -------------')
         }
     })
     .then((data) => {
+        console.log('----------- RESPONSE FROM ONFIDO -------------')
+        console.log(data)
         const parse = JSON.parse(data)
-        if (parse.checks[0].result === 'clear'){
+        if (parse && parse.checks[0] && parse.checks[0].result === 'clear'){
+            console.log('----------- APPROVED -------------')
+            console.log(data)
             const onfido_status = 'approved'
             const newjwt = jwt.jwt_sign({email, onfido_status, onfido_id});
             const newData = {onfido_status};
             const query = {email};
             userModel.findOneAndUpdate(query, newData, {upsert:true}, (err, doc) => {
                 if(!err){
+                    console.log('----------- DATABSE PASS -------------')
                     res.status(200).json({data: true, token: newjwt, onfido_status})
+                } else {
+                    console.log('----------- DATABSE FAIL -------------')
                 }
             })
         } else {
+            console.log('----------- NOT CLEAR -------------')
             res.status(400).json({status: 400, data: false})
         }
     })
