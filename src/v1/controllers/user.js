@@ -228,6 +228,8 @@ function post_account(req, res) {
                         })
                     }
                 })
+            } else  {
+                console.log('----- NOT APPROVED -----')
             }
         })
     }
