@@ -192,42 +192,44 @@ function post_account(req, res) {
             const onfido_id = jwtdata.onfido_id;
             const email = jwtdata.email;
             const newAccount = {worbli_account_name, public_key_active, public_key_owner, email}
+            const onfido_status = jwtdata.onfido_status
             jwtData = jwtdata;
-            userModel.find({email},(err, data) => {
-                if (!err && data && data[0].worbli_account_name) {
-                    res.status(400).json({data: false, error: `You have already claimed the name: ${data[0].worbli_account_name}`})
-                } else {
-                    account.check_exists(worbli_account_name)
-                    .then((exists) => {
-                        if(exists === true || exists === undefined){
-                            res.status(400).json({data: false, error: 'Name already exists'})
-                        } else {
-                            return account.create_account(newAccount)
-                        }
-                    })
-                    .then((data) => {
-                        const email = jwtData.email;
-                        const onfido_status = 'started';
-                        const newData = {worbli_account_name, onfido_status}
-                        const query = {email};
-                        userModel.findOneAndUpdate(query, newData, {upsert:true}, (err, doc) => {
-                            if (!err){
-                                const newjwt = jwt.jwt_sign({email, onfido_status, onfido_id});
-                                res.status(200).json({data: true, newjwt})
+            if (onfido_status === 'approved'){
+                userModel.find({email},(err, data) => {
+                    if (!err && data && data[0].worbli_account_name) {
+                        res.status(400).json({data: false, error: `You have already claimed the name: ${data[0].worbli_account_name}`})
+                    } else {
+                        account.check_exists(worbli_account_name)
+                        .then((exists) => {
+                            if(exists === true || exists === undefined){
+                                res.status(400).json({data: false, error: 'Name already exists'})
                             } else {
-                                res.status(400).json({data: false})
+                                return account.create_account(newAccount)
                             }
-                        });
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                        res.status(400).json({data: false})
-                    })
-                }
-            })
+                        })
+                        .then((data) => {
+                            const email = jwtData.email;
+                            const onfido_status = 'started';
+                            const newData = {worbli_account_name, onfido_status}
+                            const query = {email};
+                            userModel.findOneAndUpdate(query, newData, {upsert:true}, (err, doc) => {
+                                if (!err){
+                                    const newjwt = jwt.jwt_sign({email, onfido_status, onfido_id});
+                                    res.status(200).json({data: true, newjwt})
+                                } else {
+                                    res.status(400).json({data: false})
+                                }
+                            });
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                            res.status(400).json({data: false})
+                        })
+                    }
+                })
+            }
         })
-  
-}
+    }
 
 function get_account(req, res) {
     console.log(req.body)
