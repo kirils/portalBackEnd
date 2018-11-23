@@ -192,7 +192,7 @@ function post_account(req, res) {
             const onfido_id = jwtdata.onfido_id;
             const email = jwtdata.email;
             const newAccount = {worbli_account_name, public_key_active, public_key_owner, email}
-            const onfido_status = jwtdata.onfido_status
+            const onfido_status = jwtdata.onfido_status;
             jwtData = jwtdata;
             if (onfido_status === 'approved'){
                 userModel.find({email},(err, data) => {
@@ -204,6 +204,7 @@ function post_account(req, res) {
                             if(exists === true || exists === undefined){
                                 res.status(400).json({data: false, error: 'Name already exists'})
                             } else {
+                                consiole.log('---------- ACCOUNT BEING CREATED -------------')
                                 return account.create_account(newAccount)
                             }
                         })
