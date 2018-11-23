@@ -230,6 +230,7 @@ function post_account(req, res) {
                 })
             } else  {
                 console.log('----- NOT APPROVED -----')
+                res.status(400).json({data: false, error: 'You must complete KYC'})
             }
         })
     }
