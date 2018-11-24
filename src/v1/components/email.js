@@ -96,7 +96,7 @@ function send_email(email, newjwt, template) {
         },
         Source: 'do-not-reply@worbli.io', 
         ReplyToAddresses: ['do-not-reply@worbli.io'],
-        };       
+        };     
         var sendPromise = new AWS.SES({apiVersion: '2010-12-01'}).sendEmail(params).promise();  
         sendPromise
         .then((data) => {

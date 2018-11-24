@@ -1,6 +1,7 @@
 const userModel = require('../models/user.js')
 const jwt = require('../components/jwt.js');
 const emailSender = require('../components/email.js');
+const logger = require('../components/logger.js');
 const onfido = require('../components/onfido.js');
 var bigInt = require("big-integer");
 var crypto = require('crypto');
@@ -12,9 +13,9 @@ function post_authorize(req, res) {
         const email = req.body.email;
         const agreed_terms = req.body.agreed_terms;
         const agreed_marketing = req.body.agreed_marketing;
+        logger.log('create aplicant id', email,  {data})
         userModel.find({email},(err, data) => {
             if (!err && data && data[0] && data[0]._id) {
-                const mongo_id = data[0]._id;
                 const email = data[0].email;
                 const onfido_status = data[0].onfido_status;
                 const onfido_id = data[0].onfido_id;
