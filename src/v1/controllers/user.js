@@ -204,13 +204,12 @@ function post_account(req, res) {
                             if(exists === true || exists === undefined){
                                 res.status(400).json({data: false, error: 'Name already exists'})
                             } else {
-                                consiole.log('---------- ACCOUNT BEING CREATED -------------')
                                 return account.create_account(newAccount)
                             }
                         })
                         .then((data) => {
                             const email = jwtData.email;
-                            const onfido_status = 'started';
+                            const onfido_status = 'named';
                             const newData = {worbli_account_name, onfido_status}
                             const query = {email};
                             userModel.findOneAndUpdate(query, newData, {upsert:true}, (err, doc) => {
@@ -223,13 +222,11 @@ function post_account(req, res) {
                             });
                         })
                         .catch((err) => {
-                            console.log(err)
                             res.status(400).json({data: false})
                         })
                     }
                 })
             } else  {
-                console.log('----- NOT APPROVED -----')
                 res.status(400).json({data: false, error: 'You must complete KYC'})
             }
         })
