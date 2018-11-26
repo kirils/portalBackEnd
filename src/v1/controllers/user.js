@@ -1,4 +1,5 @@
 const userModel = require('../models/user.js')
+const sharegrabRequestModel = require('../models/sharegrabRequest.js')
 const snapShotModel = require('../models/snapShot.js')
 const jwt = require('../components/jwt.js');
 const account = require('../components/account.js');
@@ -248,7 +249,7 @@ function post_snapshot(req, res) {
     });  
 }
 
-function get_sharedrop(req, res){
+function get_security(req, res){
     const bearer = req.headers.authorization.split(" ")
     const token = bearer[1];
     jwt.jwt_decode(token)
@@ -263,4 +264,37 @@ function get_sharedrop(req, res){
     })
 }
 
-module.exports = { post_login, post_auth, post_profile, get_profile, put_profile, post_account, get_account, post_snapshot, post_password, get_sharedrop};
+function get_sharedrop(req, res){
+    const bearer = req.headers.authorization.split(" ")
+    const token = bearer[1];
+    jwt.jwt_decode(token)
+    .then((jwtdata) => {
+        const onfido_id = jwtdata.onfido_id;
+        const email = jwtdata.email;
+        userModel.find({email},(err, data) => {
+            const worbli_account_name = data[0].worbli_account_name;
+            sharegrabRequestModel.find({worbli_account_name},(err, data) => {
+                if(!err && data && data[0] && data[0].state === 'success'){
+                    const onfido_status = 'credited'; // <-check
+                    const newData = {onfido_status}
+                    const query = {email};
+                    userModel.findOneAndUpdate(query, newData, {upsert:true}, (err, doc) => {
+                        if (!err){
+                            const newjwt = jwt.jwt_sign({email, onfido_status, onfido_id});
+                            res.status(200).json({data: true, newjwt})
+                        } else {
+                            res.status(400).json({data: false})
+                        }
+                    })
+                } else {
+                    res.status(400).json({data: false})
+                }
+            })
+        })
+    })
+    .catch((err) => {
+        console.log('fail')
+    })
+}
+
+module.exports = { post_login, post_auth, post_profile, get_profile, put_profile, post_account, get_account, post_snapshot, post_password, get_security, get_sharedrop};
