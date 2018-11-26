@@ -13,7 +13,7 @@ function create_account(data) {
             const accountRequest = data;
             const params = {
                 MessageBody: JSON.stringify(accountRequest),
-                QueueUrl: "https://sqs.us-east-1.amazonaws.com/373953752322/new-accounts"
+                QueueUrl: process.env.SQS_QUEUE
             };
             sqs.sendMessage(params, function(err, data) {
                 if (err) {
