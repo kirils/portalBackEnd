@@ -7,32 +7,30 @@ AWS.config.update({ "accessKeyId": process.env.AWS_ACCESS_KEY_ID, "secretAccessK
 const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
 
 function create_account(data) {
-    return new Promise(function(resolve, reject) {
-        if(data && data.worbli_account_name && data.public_key_active && data.public_key_owner){
-            console.log("------- MAKING NOW B -------")
-            const accountRequest = data;
-            const params = {
-                MessageBody: JSON.stringify(accountRequest),
-                QueueUrl: process.env.SQS_QUEUE
-            };
-            sqs.sendMessage(params, function(err, data) {
-                if (err) {
-                    reject("Error", err);
-                } else {
-                    resolve(data.MessageId);
-                }
-            });
-        }
-    })
+  return new Promise(function(resolve, reject) {
+    if(data && data.worbli_account_name && data.public_key_active && data.public_key_owner){
+      const accountRequest = data;
+      const params = {
+        MessageBody: JSON.stringify(accountRequest),
+        QueueUrl: process.env.SQS_QUEUE
+      };
+      sqs.sendMessage(params, function(err, data) {
+          if (err) {
+            reject("Error", err);
+          } else {
+            resolve(data.MessageId);
+          }
+      });
+    }
+  })
 }
 
-
 function check_exists(worbli_account_name) {
-    return new Promise((resolve, reject) => {
-        rpc.get_account(worbli_account_name)
-        .then((data) => resolve(true))
-        .catch((err) => resolve(false))
-    })
+  return new Promise((resolve, reject) => {
+    rpc.get_account(worbli_account_name)
+    .then((data) => resolve(true))
+    .catch((err) => resolve(false))
+  })
 }
 
 module.exports = { create_account, check_exists };

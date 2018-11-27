@@ -6,10 +6,10 @@ const helmet = require('helmet');
 const routes = require('./router.js');
 
 const corsOptions = {
-    origin: process.env.FRONT_END_URL,
-    allowedHeaders: ['Content-Type', 'Authorization', 'Content-Length', 'X-Requested-With', 'Accept'],
-    methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
-    optionsSuccessStatus: 200
+  origin: process.env.FRONT_END_URL,
+  allowedHeaders: ['Content-Type', 'Authorization', 'Content-Length', 'X-Requested-With', 'Accept'],
+  methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
+  optionsSuccessStatus: 200
 }
 
 const app = express();
