@@ -8,8 +8,8 @@ const snapShotSchema = new mongoose.Schema({
   staked:         { type: Number, required: true },
   delegated:      { type: Number, required: true },
   total:          { type: Number, required: true },
-  created_at:     Date,
-  updated_at:     Date
+  created_at:     { type: Date, default: Date.now },
+  updated_at:     { type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model('SnapShot', snapShotSchema);

@@ -25,8 +25,8 @@ const userSchema = new mongoose.Schema({
   date_birth_year:        { type: Number },
   gender:                 { type: String },
   security_code:          { type: String, index: true },
-  created_at:             { type: Date },
-  updated_at:             { type: Date },
+  created_at:             { type: Date, default: Date.now },
+  updated_at:             { type: Date, default: Date.now },
   onfido_status:          { type: String, required: true },
   onfido_id:              { type: String },
 });
