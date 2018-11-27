@@ -288,4 +288,19 @@ function get_sharedrop(req, res){
   })
 }
 
-module.exports = { post_login, post_auth, post_profile, get_profile, put_profile, post_account, get_account, post_snapshot, post_password, get_security, get_sharedrop};
+function get_name(req, res){
+  const bearer = req.headers.authorization.split(" ")
+  const token = bearer[1];
+  jwt.jwt_decode(token)
+  .then((jwtdata) => {
+    const email = jwtdata.email;
+    userModel.find({email},(err, data) => {
+      if (!err && data && data[0] && data[0].worbli_account_name) { 
+        const worbli_account_name = data[0].worbli_account_name;
+        res.status(200).json({data: true, worbli_account_name})
+      }
+    })
+  })
+}
+
+module.exports = { post_login, post_auth, post_profile, get_profile, put_profile, post_account, get_account, post_snapshot, post_password, get_security, get_sharedrop, get_name};
