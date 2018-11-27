@@ -23,5 +23,6 @@ router.route('/account/').get(validate(get_account.validate), userController.get
 router.route('/snapshot/').get(validate(post_snapshot.validate), userController.post_snapshot);
 router.route('/security/').get(userController.get_security);
 router.route('/sharedrop/').get(userController.get_sharedrop);
+router.route('/name/').get(userController.get_name);
 
 module.exports = router;
