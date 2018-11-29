@@ -140,7 +140,7 @@ function get_status(req, res){
         const query = {email};
         userModel.findOneAndUpdate(query, newData, {upsert:true}, (err, doc) => {
           if(!err){
-            res.status(200).json({data: true, resulttoken: newjwt, onfido_status, action:'redirect'})
+            res.status(200).json({data: true, token: newjwt, onfido_status, action:'redirect'})
           }
         })
       } else if (parse && parse.checks[0] && parse.checks[0].status === 'complete' && parse.checks[0].result !== 'clear'){
