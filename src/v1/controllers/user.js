@@ -200,24 +200,22 @@ function post_account(req, res) {
             if(exists === true || exists === undefined){
               res.status(400).json({data: false, error: 'Name already exists'})
             } else {
-              return account.create_account(newAccount)
+              const email = jwtData.email;
+              const onfido_status = 'named';
+              const newData = {worbli_account_name, onfido_status}
+              const query = {email};
+              console.log(`----- Starting Mongo Insert - ${(new Date).getTime()}`)
+              userModel.findOneAndUpdate(query, newData, {upsert:true}, (err, doc) => {
+                if (!err){
+                  account.create_account(newAccount)
+                  const newjwt = jwt.jwt_sign({email, onfido_status, onfido_id});
+                  console.log(`----- Finished Mongo Insert - ${(new Date).getTime()}`)
+                  res.status(200).json({data: true, newjwt})
+                } else {
+                  res.status(400).json({data: false})
+                }
+              });
             }
-          })
-          .then((data) => {
-            const email = jwtData.email;
-            const onfido_status = 'named';
-            const newData = {worbli_account_name, onfido_status}
-            const query = {email};
-            console.log(`----- Starting Mongo Insert - ${(new Date).getTime()}`)
-            userModel.findOneAndUpdate(query, newData, {upsert:true}, (err, doc) => {
-              if (!err){
-                const newjwt = jwt.jwt_sign({email, onfido_status, onfido_id});
-                console.log(`----- Finished Mongo Insert - ${(new Date).getTime()}`)
-                res.status(200).json({data: true, newjwt})
-              } else {
-                res.status(400).json({data: false})
-              }
-            });
           })
           .catch((err) => {
             res.status(400).json({data: false})
