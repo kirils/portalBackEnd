@@ -14,10 +14,12 @@ function create_account(data) {
         MessageBody: JSON.stringify(accountRequest),
         QueueUrl: process.env.SQS_QUEUE
       };
+      console.log(`----- STARTING SQS - ${(new Date).getTime()}`)
       sqs.sendMessage(params, function(err, data) {
           if (err) {
             reject("Error", err);
           } else {
+            console.log(`----- FINISHED SQS - ${(new Date).getTime()}`)
             resolve(data.MessageId);
           }
       });
@@ -35,3 +37,5 @@ function check_exists(worbli_account_name) {
 
 module.exports = { create_account, check_exists };
     
+
+var milliseconds = (new Date).getTime();
