@@ -133,16 +133,19 @@ function get_status(req, res){
   .then((data) => {
     if (data) {
       const parse = JSON.parse(data)
-      if (parse && parse.checks[0] && parse.checks[0].result === 'clear'){
-        const onfido_status = 'approved'
-        const newjwt = jwt.jwt_sign({email, onfido_status, onfido_id});
-        const newData = {onfido_status};
-        const query = {email};
-        userModel.findOneAndUpdate(query, newData, {upsert:true}, (err, doc) => {
-          if(!err){
-            res.status(200).json({data: true, token: newjwt, onfido_status})
-          }
-        })
+      if (parse && parse.checks[0] && parse.checks[0].status === 'complete' && parse.checks[0].result === 'clear'){
+        res.status(200).json({status: 200, data: true, action:'support'})
+        // const onfido_status = 'approved'
+        // const newjwt = jwt.jwt_sign({email, onfido_status, onfido_id});
+        // const newData = {onfido_status};
+        // const query = {email};
+        // userModel.findOneAndUpdate(query, newData, {upsert:true}, (err, doc) => {
+        //   if(!err){
+        //     res.status(200).json({data: true, resulttoken: newjwt, onfido_status, action:'redirect'})
+        //   }
+        // })
+      } else if (parse && parse.checks[0] && parse.checks[0].status === 'complete' && parse.checks[0].result !== 'clear'){
+        res.status(200).json({data: true, action:'support'})
       } else {
         res.status(400).json({status: 400, data: false})
       }
