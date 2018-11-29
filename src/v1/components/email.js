@@ -18,7 +18,7 @@ function send_email(email, newjwt, template) {
               <table style="margin: 0; padding: 60px; background-color: #F7F7F7;" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                 <td style="text-align:center">
-                  <img src="${url}/esm-bundled/images/email-logo.png" width="200px" style="margin-bottom: 20px;">
+                  <img src="https://d1r0t58ow9lja0.cloudfront.net/email-logo.png" width="200px" style="margin-bottom: 20px;">
                   <table style="margin: 0; padding: 60px; background-color: #FFFFFF; text-align:left; border-radius: 0.4em;" cellpadding="0" cellspacing="0" width="100%">
                   <tr>
                     <td><b>Confirm Your Registration</b></td>
@@ -58,7 +58,7 @@ function send_email(email, newjwt, template) {
               <table style="margin: 0; padding: 60px; background-color: #F7F7F7;" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                 <td style="text-align:center">
-                  <img src="${url}/esm-bundled/images/email-logo.png" width="200px" style="margin-bottom: 20px;">
+                  <img src="https://d1r0t58ow9lja0.cloudfront.net/email-logo.png" width="200px" style="margin-bottom: 20px;">
                   <table style="margin: 0; padding: 60px; background-color: #FFFFFF; text-align:left; border-radius: 0.4em;" cellpadding="0" cellspacing="0" width="100%">
                   <tr>
                     <td><b>Reset your password</b></td>
