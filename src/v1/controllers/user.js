@@ -176,7 +176,6 @@ function put_profile(req, res) {
 }
 
 function post_account(req, res) {
-  console.log(`----- Start - ${(new Date).getTime()}`)
   const worbli_account_name = req.body.worbli_account_name;
   const public_key_active = req.body.public_key_active;
   const public_key_owner = req.body.public_key_owner;
@@ -204,12 +203,10 @@ function post_account(req, res) {
               const onfido_status = 'named';
               const newData = {worbli_account_name, onfido_status}
               const query = {email};
-              console.log(`----- Starting Mongo Insert - ${(new Date).getTime()}`)
               userModel.findOneAndUpdate(query, newData, {upsert:true}, (err, doc) => {
                 if (!err){
                   account.create_account(newAccount)
                   const newjwt = jwt.jwt_sign({email, onfido_status, onfido_id});
-                  console.log(`----- Finished Mongo Insert - ${(new Date).getTime()}`)
                   res.status(200).json({data: true, newjwt})
                 } else {
                   res.status(400).json({data: false})
