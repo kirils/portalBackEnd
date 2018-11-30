@@ -5,6 +5,7 @@
             "url": "mongodb://localhost:27017",
             "activeOnStartUp": true,
         }
-    }
+    },
+    "editor.tabSize": 2
     
 }
