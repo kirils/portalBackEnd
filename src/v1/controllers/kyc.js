@@ -1,6 +1,7 @@
 const jwt = require('../components/jwt.js');
 const fetch = require('../components/fetch.js');
 const onfido = require('../components/onfido.js');
+const mail = require('../components/email.js');
 const userModel = require('../models/user.js');
 const onfidoWebhookModel = require('../models/onfidoWebhook.js');
 
@@ -143,7 +144,15 @@ function get_status(req, res){
             res.status(200).json({data: true, token: newjwt, onfido_status, action:'redirect'})
           }
         })
-      } else if (parse && parse.checks[0] && parse.checks[0].status === 'complete' && parse.checks[0].result !== 'clear'){
+      } else
+       if (parse && parse.checks[0] && parse.checks[0].status === 'complete' && parse.checks[0].result !== 'clear'){
+        userModel.find({email},(err, data) => {
+          if(!err && data && data[0] && data[0].name_first){
+            const firstName = data[0].name_first;
+            console.log(firstName);
+            mail.send_email(email, '', 'kycfail', firstName)
+          }
+        })
         res.status(200).json({status: 200, data: true, action:'support'})
       } else {
         res.status(400).json({status: 400, data: false})
