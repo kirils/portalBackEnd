@@ -4,6 +4,7 @@ const snapShotModel = require('../models/snapShot.js')
 const jwt = require('../components/jwt.js');
 const account = require('../components/account.js');
 const onfido = require('../components/onfido.js');
+const email = require('../components/email.js');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -284,6 +285,9 @@ function get_sharedrop(req, res){
       })
     })
   })
+  .catch((err) => {
+    res.status(400).json({data: false, error: err})
+  })
 }
 
 function get_name(req, res){
@@ -298,6 +302,9 @@ function get_name(req, res){
         res.status(200).json({data: true, worbli_account_name})
       }
     })
+  })
+  .catch((err) => {
+    res.status(400).json({data: false, error: err})
   })
 }
 
